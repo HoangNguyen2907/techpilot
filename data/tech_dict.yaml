@@ -20,45 +20,57 @@
 #   * Alias strings must be unique across all entries (checked in test_tagger.py).
 #   * Underscored names ("flutter_riverpod") are single tokens, so list them explicitly.
 #   * Strip URLs before tagging comment text (Tagger does this by default).
+#   * Optional top-level keys read by tagger.py: `implies`, `versioned`, `case_sensitive`
+#     (see the tagger.py docstring). The file is validated on load.
+#   * Ambiguous aliases are confirmed by a context term within 200 characters, or by the
+#     story title / URL words. One entry per technology: do not bundle rivals under one key.
 # This list is a starting point: review it against real data and keep adding entries.
 
-version: 2
-
+version: 3
 categories:
-  - language
-  - mobile
-  - state-mgmt
-  - web-frontend
-  - web-backend
-  - runtime
-  - database
-  - cloud-devops
-  - ai-ml
-  - tooling
-  - desktop
-  - hardware
-  - os
-  - company
-  - security
-  - crypto
-  - networking
-  - web-platform
-  - browser
-  - data
-  - design
-  - platform
-  - gaming
-  - science-energy
-  - industry
-  - policy
-  - engineering
-
+  [
+    language,
+    mobile,
+    state-mgmt,
+    web-frontend,
+    web-backend,
+    runtime,
+    database,
+    cloud-devops,
+    ai-ml,
+    tooling,
+    desktop,
+    hardware,
+    os,
+    company,
+    security,
+    crypto,
+    networking,
+    web-platform,
+    browser,
+    data,
+    design,
+    platform,
+    gaming,
+    science-energy,
+    industry,
+    policy,
+    engineering,
+    people,
+  ]
 technologies:
-  # ---------- Languages ----------
-  python: { category: language, aliases: [python, cpython] }
-  javascript: { category: language, aliases: [javascript, ecmascript] }
-  typescript: { category: language, aliases: [typescript] }
-  rust: { category: language, aliases: [rust, rustlang, "rust-lang"] }
+  python:
+    category: language
+    aliases: [python, cpython]
+  javascript:
+    category: language
+    aliases: [javascript, ecmascript]
+  typescript:
+    category: language
+    aliases: [typescript]
+  rust:
+    category: language
+    aliases: [rust, rustlang, rust-lang]
   go:
     category: language
     aliases: [golang]
@@ -69,15 +81,19 @@ technologies:
         goroutine,
         goroutines,
         gopher,
-        "go module",
-        "go modules",
-        "go mod",
+        go module,
+        go modules,
+        go mod,
         gofmt,
-        "go generics",
-        "go 1.",
+        go generics,
+        go 1.,
       ]
-  java: { category: language, aliases: [java, jvm, jdk] }
-  kotlin: { category: language, aliases: [kotlin] }
+  java:
+    category: language
+    aliases: [java, jvm, jdk]
+  kotlin:
+    category: language
+    aliases: [kotlin]
   swift:
     category: language
     aliases: []
@@ -90,544 +106,616 @@ technologies:
         uikit,
         apple,
         macos,
-        "swift 5",
-        "swift 6",
-        "swift package",
+        swift 5,
+        swift 6,
+        swift package,
       ]
   dart:
     category: language
     aliases: [dartlang]
     ambiguous_aliases: [dart]
-    context: [flutter, "pub.dev", pubspec, "dart 3", "dart sdk"]
-  cpp: { category: language, aliases: ["c++", cplusplus] }
-  csharp: { category: language, aliases: ["c#", csharp] }
-  dotnet: { category: runtime, aliases: [dotnet, "asp.net", ".net core"] }
-  ruby: { category: language, aliases: [ruby] }
-  php: { category: language, aliases: [php] }
-  elixir: { category: language, aliases: [elixir] }
-  scala: { category: language, aliases: [scala] }
-  haskell: { category: language, aliases: [haskell] }
-  clojure: { category: language, aliases: [clojure] }
-  ocaml: { category: language, aliases: [ocaml] }
-  lua: { category: language, aliases: [lua, luajit] }
+    context: [flutter, pub.dev, pubspec, dart 3, dart sdk]
+  cpp:
+    category: language
+    aliases: [c++, cplusplus]
+  csharp:
+    category: language
+    aliases: [c#, csharp]
+  ruby:
+    category: language
+    aliases: [ruby]
+  php:
+    category: language
+    aliases: [php]
+  elixir:
+    category: language
+    aliases: [elixir]
+  scala:
+    category: language
+    aliases: [scala]
+  haskell:
+    category: language
+    aliases: [haskell]
+  clojure:
+    category: language
+    aliases: [clojure]
+  ocaml:
+    category: language
+    aliases: [ocaml]
+  lua:
+    category: language
+    aliases: [lua, luajit]
   zig:
     category: language
-    aliases: [ziglang, "zig lang"]
+    aliases: [ziglang, zig lang]
     ambiguous_aliases: [zig]
-    context: [compiler, comptime, "zig 0.", allocator]
+    context: [compiler, comptime, zig 0., allocator]
   julia:
     category: language
     aliases: [julialang]
     ambiguous_aliases: [julia]
-    context:
-      [julialang, "julia lang", "julia 1.", numerical, "scientific computing"]
-
-  # ---------- Mobile ----------
-  flutter: { category: mobile, aliases: [flutter] }
-  react-native: { category: mobile, aliases: ["react native", "react-native"] }
-  swiftui: { category: mobile, aliases: [swiftui] }
-  jetpack-compose: { category: mobile, aliases: ["jetpack compose"] }
+    context: [julialang, julia lang, julia 1., numerical, scientific computing]
+  flutter:
+    category: mobile
+    aliases: [flutter]
+  react-native:
+    category: mobile
+    aliases: [react native, react-native]
+  swiftui:
+    category: mobile
+    aliases: [swiftui]
+  jetpack-compose:
+    category: mobile
+    aliases: [jetpack compose]
   kotlin-multiplatform:
-    {
-      category: mobile,
-      aliases: ["kotlin multiplatform", "compose multiplatform"],
-    }
+    category: mobile
+    aliases: [kotlin multiplatform, compose multiplatform]
   dotnet-maui:
-    { category: mobile, aliases: [".net maui", "dotnet maui", xamarin] }
-  android: { category: mobile, aliases: [android, "android studio"] }
+    category: mobile
+    aliases: [.net maui, dotnet maui, xamarin]
+  android:
+    category: mobile
+    aliases: [android, android studio]
   ios:
     category: mobile
-    aliases: [iphone, "app store"]
+    aliases: [iphone, app store]
     ambiguous_aliases: [ios]
-    context: [apple, iphone, xcode, swift, "app store", ipad]
+    context: [apple, iphone, xcode, swift, app store, ipad]
   expo:
     category: mobile
-    aliases: ["expo go"]
+    aliases: [expo go]
     ambiguous_aliases: [expo]
-    context: ["react native", "react-native", eas, "expo sdk"]
-
-  # ---------- State management (Flutter) ----------
-  riverpod:
-    {
-      category: state-mgmt,
-      aliases: [riverpod, flutter_riverpod, hooks_riverpod],
-    }
-  bloc:
+    context: [react native, react-native, eas, expo sdk]
+  getx:
     category: state-mgmt
-    aliases: [flutter_bloc]
-    ambiguous_aliases: [bloc]
-    context: [flutter, dart, cubit, flutter_bloc]
-  provider:
+    aliases: [getx]
+  mobx:
     category: state-mgmt
-    aliases: []
-    ambiguous_aliases: [provider]
-    context: [flutter, riverpod, changenotifier, dart]
-  getx: { category: state-mgmt, aliases: [getx] }
-  mobx: { category: state-mgmt, aliases: [mobx] }
-  redux: { category: state-mgmt, aliases: [redux, "redux toolkit"] }
-
-  # ---------- Web frontend ----------
+    aliases: [mobx]
+  redux:
+    category: state-mgmt
+    aliases: [redux, redux toolkit]
   react:
     category: web-frontend
-    aliases: [reactjs, "react.js"]
+    aliases: [reactjs, react.js]
     ambiguous_aliases: [react]
-    context:
-      [
+    context: [
         javascript,
         jsx,
         hooks,
-        "react 18",
-        "react 19",
+        react 18,
+        react 19,
         frontend,
         nextjs,
-        "react component",
-        "react server components",
+        react component,
+        react server
+        components,
       ]
   vue:
     category: web-frontend
-    aliases: [vuejs, "vue.js"]
+    aliases: [vuejs, vue.js]
     ambiguous_aliases: [vue]
-    context: [javascript, nuxt, "composition api", frontend, vite]
+    context: [javascript, nuxt, composition api, frontend, vite]
   angular:
     category: web-frontend
-    aliases: [angularjs, "angular.js"]
+    aliases: [angularjs, angular.js]
     ambiguous_aliases: [angular]
-    context: [typescript, rxjs, frontend, "angular cli", "angular material"]
-  svelte: { category: web-frontend, aliases: [svelte, sveltekit] }
-  solidjs: { category: web-frontend, aliases: [solidjs, "solid.js"] }
-  nextjs: { category: web-frontend, aliases: [nextjs, "next.js"] }
-  nuxt: { category: web-frontend, aliases: [nuxt, nuxtjs] }
+    context: [typescript, rxjs, frontend, angular cli, angular material]
+  svelte:
+    category: web-frontend
+    aliases: [svelte, sveltekit]
+  solidjs:
+    category: web-frontend
+    aliases: [solidjs, solid.js]
+  nextjs:
+    category: web-frontend
+    aliases: [nextjs, next.js]
+  nuxt:
+    category: web-frontend
+    aliases: [nuxt, nuxtjs]
   astro:
     category: web-frontend
-    aliases: ["astro.build", astrojs]
+    aliases: [astro.build, astrojs]
     ambiguous_aliases: [astro]
-    context:
-      ["static site", javascript, islands, framework, "content collections"]
-  htmx: { category: web-frontend, aliases: [htmx] }
+    context: [static site, javascript, islands, framework, content collections]
+  htmx:
+    category: web-frontend
+    aliases: [htmx]
   tailwind:
-    { category: web-frontend, aliases: [tailwind, tailwindcss, "tailwind css"] }
-  vite: { category: tooling, aliases: [vite, vitejs] }
-  webassembly: { category: runtime, aliases: [webassembly, wasm] }
-
-  # ---------- Web backend / runtimes ----------
+    category: web-frontend
+    aliases: [tailwind, tailwindcss, tailwind css]
+  vite:
+    category: tooling
+    aliases: [vite, vitejs]
+  webassembly:
+    category: runtime
+    aliases: [webassembly, wasm]
   nodejs:
     category: runtime
-    aliases: [nodejs, "node.js"]
+    aliases: [nodejs, node.js]
     ambiguous_aliases: [node]
-    context: [javascript, npm, v8, "node 20", "node 22", runtime]
-  deno: { category: runtime, aliases: [deno] }
+    context: [javascript, npm, v8, node 20, node 22, runtime]
+  deno:
+    category: runtime
+    aliases: [deno]
   bun:
     category: runtime
-    aliases: ["bun.sh"]
+    aliases: [bun.sh]
     ambiguous_aliases: [bun]
     context: [javascript, node, nodejs, deno, typescript, runtime, bundler]
-  django: { category: web-backend, aliases: [django] }
-  flask: { category: web-backend, aliases: [flask] }
-  fastapi: { category: web-backend, aliases: [fastapi] }
+  django:
+    category: web-backend
+    aliases: [django]
+  flask:
+    category: web-backend
+    aliases: [flask]
+  fastapi:
+    category: web-backend
+    aliases: [fastapi]
   rails:
     category: web-backend
-    aliases: ["ruby on rails"]
+    aliases: [ruby on rails]
     ambiguous_aliases: [rails]
-    context: [ruby, activerecord, hotwire, "37signals", "rails 7", "rails 8"]
-  laravel: { category: web-backend, aliases: [laravel] }
+    context: [ruby, activerecord, hotwire, 37signals, rails 7, rails 8]
+  laravel:
+    category: web-backend
+    aliases: [laravel]
   spring:
     category: web-backend
-    aliases: ["spring boot"]
+    aliases: [spring boot]
     ambiguous_aliases: [spring]
-    context: [java, kotlin, jvm, "spring framework"]
+    context: [java, kotlin, jvm, spring framework]
   express:
     category: web-backend
-    aliases: [expressjs, "express.js"]
+    aliases: [expressjs, express.js]
     ambiguous_aliases: [express]
     context: [node, nodejs, middleware, javascript]
   phoenix:
     category: web-backend
-    aliases: ["phoenix framework", liveview]
+    aliases: [phoenix framework, liveview]
     ambiguous_aliases: [phoenix]
     context: [elixir, liveview, erlang]
-  graphql: { category: web-backend, aliases: [graphql] }
-  grpc: { category: web-backend, aliases: [grpc] }
-
-  # ---------- Databases ----------
-  postgres: { category: database, aliases: [postgres, postgresql] }
-  sqlite: { category: database, aliases: [sqlite, sqlite3] }
-  mysql: { category: database, aliases: [mysql, mariadb] }
+  graphql:
+    category: web-backend
+    aliases: [graphql]
+  grpc:
+    category: web-backend
+    aliases: [grpc]
+  postgres:
+    category: database
+    aliases: [postgres, postgresql]
+  sqlite:
+    category: database
+    aliases: [sqlite, sqlite3]
+  mysql:
+    category: database
+    aliases: [mysql, mariadb]
   mongodb:
     category: database
     aliases: [mongodb]
     ambiguous_aliases: [mongo]
     context: [database, nosql, document, atlas]
-  redis: { category: database, aliases: [redis] }
-  valkey: { category: database, aliases: [valkey] }
-  duckdb: { category: database, aliases: [duckdb, motherduck] }
-  clickhouse: { category: database, aliases: [clickhouse] }
-  supabase: { category: database, aliases: [supabase] }
-  firebase: { category: database, aliases: [firebase, firestore] }
-  pgvector: { category: database, aliases: [pgvector] }
-  pinecone: { category: database, aliases: [pinecone] }
-  qdrant: { category: database, aliases: [qdrant] }
-
-  # ---------- Cloud / DevOps ----------
-  kubernetes: { category: cloud-devops, aliases: [kubernetes, k8s, kubectl] }
+  redis:
+    category: database
+    aliases: [redis]
+  valkey:
+    category: database
+    aliases: [valkey]
+  duckdb:
+    category: database
+    aliases: [duckdb, motherduck]
+  clickhouse:
+    category: database
+    aliases: [clickhouse]
+  supabase:
+    category: database
+    aliases: [supabase]
+  firebase:
+    category: database
+    aliases: [firebase, firestore]
+  pgvector:
+    category: database
+    aliases: [pgvector]
+  pinecone:
+    category: database
+    aliases: [pinecone]
+  qdrant:
+    category: database
+    aliases: [qdrant]
+  kubernetes:
+    category: cloud-devops
+    aliases: [kubernetes, k8s, kubectl]
   docker:
-    { category: cloud-devops, aliases: [docker, dockerfile, "docker compose"] }
-  terraform: { category: cloud-devops, aliases: [terraform, opentofu] }
-  aws: { category: cloud-devops, aliases: [aws, "amazon web services"] }
-  gcp: { category: cloud-devops, aliases: [gcp, "google cloud"] }
-  azure: { category: cloud-devops, aliases: [azure] }
-  cloudflare: { category: cloud-devops, aliases: [cloudflare] }
-  vercel: { category: cloud-devops, aliases: [vercel] }
-  nginx: { category: cloud-devops, aliases: [nginx] }
-  github-actions: { category: cloud-devops, aliases: ["github actions"] }
-  linux: { category: cloud-devops, aliases: [linux] }
+    category: cloud-devops
+    aliases: [docker, dockerfile, docker compose]
+  terraform:
+    category: cloud-devops
+    aliases: [terraform, opentofu]
+  aws:
+    category: cloud-devops
+    aliases: [aws, amazon web services]
+  gcp:
+    category: cloud-devops
+    aliases: [gcp, google cloud]
+  azure:
+    category: cloud-devops
+    aliases: [azure]
+  cloudflare:
+    category: cloud-devops
+    aliases: [cloudflare]
+  vercel:
+    category: cloud-devops
+    aliases: [vercel]
+  nginx:
+    category: cloud-devops
+    aliases: [nginx]
+  github-actions:
+    category: cloud-devops
+    aliases: [github actions]
+  linux:
+    category: cloud-devops
+    aliases: [linux]
   nix:
     category: tooling
     aliases: [nixos]
     ambiguous_aliases: [nix]
-    context: [nixos, flakes, "package manager", nixpkgs]
-
-  # ---------- AI / ML ----------
+    context: [nixos, flakes, package manager, nixpkgs]
   llm:
-    {
-      category: ai-ml,
-      aliases: [llm, llms, "large language model", "large language models"],
-    }
-  openai: { category: ai-ml, aliases: [openai] }
-  chatgpt: { category: ai-ml, aliases: [chatgpt, "gpt-4", "gpt-5"] }
-  anthropic: { category: ai-ml, aliases: [anthropic] }
+    category: ai-ml
+    aliases: [llm, llms, large language model, large language models]
+  openai:
+    category: ai-ml
+    aliases: [openai]
+  chatgpt:
+    category: ai-ml
+    aliases: [chatgpt, gpt-4, gpt-5]
+  anthropic:
+    category: ai-ml
+    aliases: [anthropic]
   claude:
     category: ai-ml
-    aliases: ["claude.ai"]
+    aliases: [claude.ai]
     ambiguous_aliases: [claude]
     context: [anthropic, llm, ai, model, sonnet, opus, haiku]
-  claude-code: { category: ai-ml, aliases: ["claude code"] }
+  claude-code:
+    category: ai-ml
+    aliases: [claude code]
   gemini:
     category: ai-ml
-    aliases: ["google gemini"]
+    aliases: [google gemini]
     ambiguous_aliases: [gemini]
-    context: [google, llm, ai, model, deepmind, "gemini 2", "gemini 3"]
+    context: [google, llm, ai, model, deepmind, gemini 2, gemini 3]
   llama:
     category: ai-ml
-    aliases: ["llama.cpp", llamacpp]
+    aliases: [llama.cpp, llamacpp]
     ambiguous_aliases: [llama]
-    context: [meta, llm, model, "llama 3", "llama 4", ollama]
+    context: [meta, llm, model, llama 3, llama 4, ollama]
   mistral:
     category: ai-ml
-    aliases: ["mistral ai"]
+    aliases: [mistral ai]
     ambiguous_aliases: [mistral]
-    context: [llm, ai, model, "open weights"]
-  deepseek: { category: ai-ml, aliases: [deepseek] }
-  ollama: { category: ai-ml, aliases: [ollama] }
-  langchain: { category: ai-ml, aliases: [langchain, langgraph] }
+    context: [llm, ai, model, open weights]
+  deepseek:
+    category: ai-ml
+    aliases: [deepseek]
+  ollama:
+    category: ai-ml
+    aliases: [ollama]
+  langchain:
+    category: ai-ml
+    aliases: [langchain, langgraph]
   rag:
     category: ai-ml
-    aliases:
-      ["retrieval-augmented generation", "retrieval augmented generation"]
+    aliases: [retrieval-augmented generation, retrieval augmented generation]
     ambiguous_aliases: [rag]
-    context: [retrieval, llm, embedding, embeddings, "vector database"]
+    context: [retrieval, llm, embedding, embeddings, vector database]
   mcp:
     category: ai-ml
-    aliases: ["model context protocol"]
+    aliases: [model context protocol]
     ambiguous_aliases: [mcp]
-    context: ["model context protocol", llm, anthropic, claude, agent, tool]
-  pytorch: { category: ai-ml, aliases: [pytorch] }
-  tensorflow: { category: ai-ml, aliases: [tensorflow] }
-  hugging-face: { category: ai-ml, aliases: ["hugging face", huggingface] }
-  github-copilot: { category: ai-ml, aliases: ["github copilot"] }
+    context: [model context protocol, llm, anthropic, claude, agent, tool]
+  pytorch:
+    category: ai-ml
+    aliases: [pytorch]
+  tensorflow:
+    category: ai-ml
+    aliases: [tensorflow]
+  hugging-face:
+    category: ai-ml
+    aliases: [hugging face, huggingface]
+  github-copilot:
+    category: ai-ml
+    aliases: [github copilot]
   cursor:
     category: ai-ml
-    aliases: ["cursor ide"]
+    aliases: [cursor ide]
     ambiguous_aliases: [cursor]
-    context: [ide, ai, vscode, editor, llm, "ai editor"]
-
-  # ---------- Tooling / Desktop ----------
-  git: { category: tooling, aliases: [git] }
-  github: { category: tooling, aliases: [github] }
+    context: [ide, ai, vscode, editor, llm, ai editor]
+  git:
+    category: tooling
+    aliases: [git]
+  github:
+    category: tooling
+    aliases: [github]
   vscode:
-    { category: tooling, aliases: [vscode, "vs code", "visual studio code"] }
-  neovim: { category: tooling, aliases: [neovim, nvim] }
+    category: tooling
+    aliases: [vscode, vs code, visual studio code]
+  neovim:
+    category: tooling
+    aliases: [neovim, nvim]
   electron:
     category: desktop
     aliases: []
     ambiguous_aliases: [electron]
-    context: [desktop, javascript, chromium, "electron app", node]
-  tauri: { category: desktop, aliases: [tauri] }
-
-  # =====================================================================
-  # v2 additions: technology in general
-  # =====================================================================
-
-  # ---------- More languages ----------
+    context: [desktop, javascript, chromium, electron app, node]
+  tauri:
+    category: desktop
+    aliases: [tauri]
   c-language:
-    {
-      category: language,
-      aliases: ["c language", "c programming", c23, c11, c99],
-    }
-  objective-c: { category: language, aliases: ["objective-c", objc] }
-  perl: { category: language, aliases: [perl, raku] }
+    category: language
+    aliases: [c language, c programming, c23, c11, c99]
+  objective-c:
+    category: language
+    aliases: [objective-c, objc]
+  perl:
+    category: language
+    aliases: [perl, raku]
   r-language:
-    {
-      category: language,
-      aliases: [rstats, "r language", "r programming", tidyverse, rstudio],
-    }
-  matlab: { category: language, aliases: [matlab, simulink] }
+    category: language
+    aliases: [rstats, r language, r programming, tidyverse, rstudio]
+  matlab:
+    category: language
+    aliases: [matlab, simulink]
   sql:
-    {
-      category: language,
-      aliases: [sql, nosql, newsql, "stored procedure", "stored procedures"],
-    }
-  fortran: { category: language, aliases: [fortran] }
-  cobol: { category: language, aliases: [cobol, mainframe, mainframes] }
+    category: language
+    aliases: [sql, nosql, newsql, stored procedure, stored procedures]
+  fortran:
+    category: language
+    aliases: [fortran]
+  cobol:
+    category: language
+    aliases: [cobol, mainframe, mainframes]
   delphi:
-    { category: language, aliases: [delphi, "object pascal", "free pascal"] }
-  visual-basic: { category: language, aliases: ["visual basic", vba, "vb.net"] }
-  fsharp: { category: language, aliases: ["f#", fsharp] }
+    category: language
+    aliases: [delphi, object pascal, free pascal]
+  visual-basic:
+    category: language
+    aliases: [visual basic, vba, vb.net]
+  fsharp:
+    category: language
+    aliases: [f#, fsharp]
   lisp:
-    { category: language, aliases: [lisp, "common lisp", "emacs lisp", elisp] }
-  erlang: { category: language, aliases: [erlang, "erlang/otp", "beam vm"] }
-  purescript: { category: language, aliases: [purescript] }
-  prolog: { category: language, aliases: [prolog] }
+    category: language
+    aliases: [lisp, common lisp, emacs lisp, elisp]
+  erlang:
+    category: language
+    aliases: [erlang, erlang/otp, beam vm]
+  purescript:
+    category: language
+    aliases: [purescript]
+  prolog:
+    category: language
+    aliases: [prolog]
   assembly:
     category: language
-    aliases: ["assembly language", "machine code"]
+    aliases: [assembly language, machine code]
     ambiguous_aliases: [assembly]
-    context: [x86, arm, assembler, "risc-v", cpu, registers, opcode]
+    context: [x86, arm, assembler, risc-v, cpu, registers, opcode]
   nim:
     category: language
-    aliases: ["nim-lang", nimlang]
+    aliases: [nim-lang, nimlang]
     ambiguous_aliases: [nim]
-    context: [nimble, compiler, "nim language", "nim 2"]
+    context: [nimble, compiler, nim language, nim 2]
   crystal-lang:
     category: language
-    aliases: ["crystal-lang", "crystal lang"]
+    aliases: [crystal-lang, crystal lang]
     ambiguous_aliases: [crystal]
-    context: [ruby, compiler, "crystal language", shards]
+    context: [ruby, compiler, crystal language, shards]
   gleam:
     category: language
-    aliases: ["gleam lang"]
+    aliases: [gleam lang]
     ambiguous_aliases: [gleam]
-    context: [erlang, beam, typed, "gleam language"]
+    context: [erlang, beam, typed, gleam language]
   mojo:
     category: language
-    aliases: ["mojo lang", "modular mojo"]
+    aliases: [mojo lang, modular mojo]
     ambiguous_aliases: [mojo]
-    context: [modular, python, compiler, "ai language"]
+    context: [modular, python, compiler, ai language]
   elm:
     category: language
-    aliases: ["elm-lang", "elm lang"]
+    aliases: [elm-lang, elm lang]
     ambiguous_aliases: [elm]
-    context: [haskell, "elm architecture", frontend, "elm language"]
+    context: [haskell, elm architecture, frontend, elm language]
   racket:
     category: language
-    aliases: ["racket-lang"]
+    aliases: [racket-lang]
     ambiguous_aliases: [racket]
-    context: [scheme, lisp, dsl, "racket language"]
+    context: [scheme, lisp, dsl, racket language]
   groovy:
     category: language
-    aliases: ["apache groovy"]
+    aliases: [apache groovy]
     ambiguous_aliases: [groovy]
     context: [gradle, jvm, jenkins, jenkinsfile]
   ada:
     category: language
-    aliases: ["ada language", "ada lang"]
+    aliases: [ada language, ada lang]
     ambiguous_aliases: [ada]
-    context: [gnat, "safety-critical", spark, "ada 2012"]
-
-  # ---------- Frameworks and libraries ----------
-  jquery: { category: web-frontend, aliases: [jquery] }
+    context: [gnat, safety-critical, spark, ada 2012]
+  jquery:
+    category: web-frontend
+    aliases: [jquery]
   bootstrap:
     category: web-frontend
-    aliases: ["bootstrap 5"]
+    aliases: [bootstrap 5]
     ambiguous_aliases: [bootstrap]
-    context: [css, html, framework, "twitter bootstrap", sass, grid]
+    context: [css, html, framework, twitter bootstrap, sass, grid]
   shadcn:
-    {
-      category: web-frontend,
-      aliases: [shadcn, "shadcn/ui", "radix ui", "headless ui"],
-    }
+    category: web-frontend
+    aliases: [shadcn, shadcn/ui, radix ui, headless ui]
   sass:
-    {
-      category: web-frontend,
-      aliases: [sass, scss, "css modules", "styled-components", "css-in-js"],
-    }
-  gatsby: { category: web-frontend, aliases: [gatsby, gatsbyjs] }
+    category: web-frontend
+    aliases: [sass, scss, css modules, styled-components, css-in-js]
+  gatsby:
+    category: web-frontend
+    aliases: [gatsby, gatsbyjs]
   remix:
     category: web-frontend
-    aliases: ["remix.run", "react router"]
+    aliases: [remix.run, react router]
     ambiguous_aliases: [remix]
-    context: [react, shopify, "react router", loaders]
+    context: [react, shopify, react router, loaders]
   tanstack:
-    {
-      category: web-frontend,
-      aliases: [tanstack, "react query", "tanstack query"],
-    }
-  zustand: { category: state-mgmt, aliases: [zustand, jotai, recoil, valtio] }
-  trpc: { category: web-backend, aliases: [trpc] }
-  fastify: { category: web-backend, aliases: [fastify, nestjs] }
-  socketio: { category: web-backend, aliases: ["socket.io"] }
+    category: web-frontend
+    aliases: [tanstack, react query, tanstack query]
+  zustand:
+    category: state-mgmt
+    aliases: [zustand, jotai, recoil, valtio]
+  trpc:
+    category: web-backend
+    aliases: [trpc]
+  fastify:
+    category: web-backend
+    aliases: [fastify, nestjs]
+  socketio:
+    category: web-backend
+    aliases: [socket.io]
   prisma:
     category: database
-    aliases: ["prisma orm"]
+    aliases: [prisma orm]
     ambiguous_aliases: [prisma]
     context: [orm, database, typescript, schema, migrations]
   drizzle:
     category: database
-    aliases: ["drizzle orm"]
+    aliases: [drizzle orm]
     ambiguous_aliases: [drizzle]
     context: [orm, typescript, sql, database]
   hono:
     category: web-backend
-    aliases: ["hono.js", honojs]
+    aliases: [hono.js, honojs]
     ambiguous_aliases: [hono]
     context: [javascript, edge, framework, cloudflare, typescript, bun]
-  ionic:
-    {
-      category: mobile,
-      aliases:
-        [ionic, "ionic framework", cordova, "apache cordova", nativescript],
-    }
   capacitor:
     category: mobile
-    aliases: ["ionic capacitor"]
+    aliases: [ionic capacitor]
     ambiguous_aliases: [capacitor]
     context: [ionic, hybrid, mobile, javascript, webview]
   qt:
     category: desktop
-    aliases: [qml, "qt creator", pyqt, pyside]
+    aliases: [qml, qt creator, pyqt, pyside]
     ambiguous_aliases: [qt]
-    context: ["c++", gui, kde, "qt 6", widgets]
-  gtk: { category: desktop, aliases: [gtk, gtk4, "gtk 4", libadwaita] }
-  imgui: { category: desktop, aliases: [imgui, "dear imgui"] }
+    context: [c++, gui, kde, qt 6, widgets]
+  gtk:
+    category: desktop
+    aliases: [gtk, gtk4, gtk 4, libadwaita]
+  imgui:
+    category: desktop
+    aliases: [imgui, dear imgui]
   windows-ui:
-    {
-      category: desktop,
-      aliases: [winui, wpf, winforms, "windows forms", avalonia, javafx],
-    }
+    category: desktop
+    aliases: [winui, wpf, winforms, windows forms, avalonia, javafx]
   jakarta-ee:
-    {
-      category: web-backend,
-      aliases: ["jakarta ee", "java ee", quarkus, micronaut, ktor],
-    }
+    category: web-backend
+    aliases: [jakarta ee, java ee, quarkus, micronaut, ktor]
   pydantic:
-    {
-      category: tooling,
-      aliases: [pydantic, sqlalchemy, "python typing", "type hints"],
-    }
-  wordpress:
-    {
-      category: web-backend,
-      aliases: [wordpress, woocommerce, drupal, symfony],
-    }
+    category: tooling
+    aliases: [pydantic, sqlalchemy, python typing, type hints]
   tokio:
-    { category: runtime, aliases: [tokio, axum, actix, serde, "async rust"] }
+    category: runtime
+    aliases: [tokio, axum, actix, serde, async rust]
   numpy:
-    { category: data, aliases: [numpy, scipy, matplotlib, "scientific python"] }
-  conda: { category: tooling, aliases: [conda, mamba, anaconda, miniconda] }
-
-  # ---------- Flutter / Dart ecosystem ----------
+    category: data
+    aliases: [numpy, scipy, matplotlib, scientific python]
+  conda:
+    category: tooling
+    aliases: [conda, mamba, anaconda, miniconda]
   pub-dev:
-    {
-      category: mobile,
-      aliases:
-        [
-          "pub.dev",
-          pubspec,
-          "flutter package",
-          "flutter packages",
-          "dart package",
-          "dart packages",
-        ],
-    }
-  flutterflow:
-    { category: mobile, aliases: [flutterflow, serverpod, shorebird] }
-  impeller: { category: mobile, aliases: [impeller, skia] }
-  flutter-ecosystem:
-    {
-      category: mobile,
-      aliases:
-        [
-          go_router,
-          get_it,
-          flutter_hooks,
-          flutter_test,
-          integration_test,
-          build_runner,
-        ],
-    }
-  freezed:
     category: mobile
-    aliases: []
-    ambiguous_aliases: [freezed, isar, drift, hive]
-    context: [flutter, dart, sqlite, "build_runner", pubspec]
+    aliases:
+      [
+        pub.dev,
+        pubspec,
+        flutter package,
+        flutter packages,
+        dart package,
+        dart packages,
+      ]
+  flutterflow:
+    category: mobile
+    aliases: [flutterflow, serverpod, shorebird]
+  impeller:
+    category: mobile
+    aliases: [impeller, skia]
   cocoapods:
-    {
-      category: mobile,
-      aliases: [cocoapods, "swift package manager", fastlane, testflight],
-    }
+    category: mobile
+    aliases: [cocoapods, swift package manager, fastlane, testflight]
   app-stores:
-    {
-      category: mobile,
-      aliases:
-        [
-          "app store connect",
-          "google play",
-          "play store",
-          "play console",
-          "app store review",
-          "app store fees",
-        ],
-    }
+    category: mobile
+    aliases:
+      [
+        app store connect,
+        google play,
+        play store,
+        play console,
+        app store review,
+        app store fees,
+      ]
   push-notifications:
-    {
-      category: mobile,
-      aliases:
-        [
-          "push notification",
-          "push notifications",
-          fcm,
-          apns,
-          "deep link",
-          "deep links",
-          "universal links",
-        ],
-    }
+    category: mobile
+    aliases:
+      [
+        push notification,
+        push notifications,
+        fcm,
+        apns,
+        deep link,
+        deep links,
+        universal links,
+      ]
   in-app-purchases:
-    {
-      category: mobile,
-      aliases:
-        [
-          "in-app purchase",
-          "in-app purchases",
-          revenuecat,
-          "app store commission",
-        ],
-    }
+    category: mobile
+    aliases:
+      [in-app purchase, in-app purchases, revenuecat, app store commission]
   cross-platform:
-    {
-      category: mobile,
-      aliases:
-        [
-          "cross-platform",
-          "cross platform",
-          "native app",
-          "native apps",
-          "mobile app",
-          "mobile apps",
-          "mobile development",
-        ],
-    }
-
-  # ---------- Operating systems ----------
+    category: mobile
+    aliases: [
+        cross-platform,
+        cross platform,
+        native app,
+        native apps,
+        mobile app,
+        mobile apps,
+        mobile
+        development,
+      ]
   windows:
     category: os
     aliases:
       [
-        "windows 11",
-        "windows 10",
-        "windows server",
+        windows 11,
+        windows 10,
+        windows server,
         win32,
         wsl,
-        "windows subsystem for linux",
+        windows subsystem for linux,
       ]
     ambiguous_aliases: [windows]
     context:
@@ -636,495 +724,418 @@ technologies:
         ntfs,
         powershell,
         registry,
-        "windows update",
-        "start menu",
-        "file explorer",
+        windows update,
+        start menu,
+        file explorer,
       ]
   macos:
-    {
-      category: os,
-      aliases: [macos, "mac os", "os x", ipados, watchos, visionos],
-    }
-  ubuntu:
-    {
-      category: os,
-      aliases: [ubuntu, canonical, debian, "linux mint", "pop!_os"],
-    }
+    category: os
+    aliases: [macos, mac os, os x, ipados, watchos, visionos]
   fedora:
     category: os
-    aliases: ["fedora linux", "red hat", redhat, rhel, "rocky linux", almalinux]
+    aliases: [fedora linux, red hat, redhat, rhel, rocky linux, almalinux]
     ambiguous_aliases: [fedora]
     context: [linux, rpm, dnf, distro]
   arch-linux:
-    {
-      category: os,
-      aliases:
-        [
-          "arch linux",
-          archlinux,
-          manjaro,
-          "linux distro",
-          "linux distros",
-          "linux distribution",
-          "linux distributions",
-        ],
-    }
-  bsd: { category: os, aliases: [freebsd, openbsd, netbsd, "dragonfly bsd"] }
+    category: os
+    aliases:
+      [
+        arch linux,
+        archlinux,
+        manjaro,
+        linux distro,
+        linux distros,
+        linux distribution,
+        linux distributions,
+      ]
+  bsd:
+    category: os
+    aliases: [freebsd, openbsd, netbsd, dragonfly bsd]
   chromeos:
-    {
-      category: os,
-      aliases:
-        [
-          chromeos,
-          "chrome os",
-          chromebook,
-          chromebooks,
-          harmonyos,
-          "harmony os",
-        ],
-    }
+    category: os
+    aliases:
+      [chromeos, chrome os, chromebook, chromebooks, harmonyos, harmony os]
   linux-kernel:
-    {
-      category: os,
-      aliases: ["linux kernel", ebpf, bpf, io_uring, "rust for linux"],
-    }
+    category: os
+    aliases: [linux kernel, ebpf, bpf, io_uring, rust for linux]
   desktop-linux:
-    {
-      category: os,
-      aliases:
-        [
-          gnome,
-          "kde plasma",
-          wayland,
-          x11,
-          xorg,
-          hyprland,
-          "tiling window manager",
-          "window manager",
-          systemd,
-        ],
-    }
+    category: os
+    aliases:
+      [
+        gnome,
+        kde plasma,
+        wayland,
+        x11,
+        xorg,
+        hyprland,
+        tiling window manager,
+        window manager,
+        systemd,
+      ]
   virtualization:
-    {
-      category: os,
-      aliases:
-        [
-          virtualization,
-          hypervisor,
-          kvm,
-          qemu,
-          vmware,
-          virtualbox,
-          firecracker,
-          "virtual machine",
-          "virtual machines",
-          proxmox,
-        ],
-    }
+    category: os
+    aliases:
+      [
+        virtualization,
+        hypervisor,
+        kvm,
+        qemu,
+        vmware,
+        virtualbox,
+        firecracker,
+        virtual machine,
+        virtual machines,
+        proxmox,
+      ]
   podman:
-    {
-      category: cloud-devops,
-      aliases:
-        [
-          podman,
-          containerd,
-          lxc,
-          "container runtime",
-          "container runtimes",
-          "kata containers",
-        ],
-    }
+    category: cloud-devops
+    aliases:
+      [
+        podman,
+        containerd,
+        lxc,
+        container runtime,
+        container runtimes,
+        kata containers,
+      ]
   unix-history:
-    { category: os, aliases: [unix, "plan 9", 9front, "redox os", "bell labs"] }
-
-  # ---------- Hardware ----------
-  cpu: { category: hardware, aliases: [cpu, cpus, multicore, "multi-core"] }
+    category: os
+    aliases: [unix, plan 9, 9front, redox os, bell labs]
+  cpu:
+    category: hardware
+    aliases: [cpu, cpus, multicore, multi-core]
   gpu:
-    {
-      category: hardware,
-      aliases: [gpu, gpus, "graphics card", "graphics cards"],
-    }
+    category: hardware
+    aliases: [gpu, gpus, graphics card, graphics cards]
   npu:
-    {
-      category: hardware,
-      aliases: [npu, npus, "neural engine", "neural processing unit"],
-    }
-  tpu: { category: hardware, aliases: [tpu, tpus, "tensor processing unit"] }
-  asic: { category: hardware, aliases: [asic, asics] }
+    category: hardware
+    aliases: [npu, npus, neural engine, neural processing unit]
+  tpu:
+    category: hardware
+    aliases: [tpu, tpus, tensor processing unit]
+  asic:
+    category: hardware
+    aliases: [asic, asics]
   fpga:
-    {
-      category: hardware,
-      aliases: [fpga, fpgas, verilog, vhdl, "hardware description language"],
-    }
-  risc-v: { category: hardware, aliases: ["risc-v", riscv, "risc v"] }
-  x86: { category: hardware, aliases: [x86, "x86-64", x86_64, amd64] }
+    category: hardware
+    aliases: [fpga, fpgas, verilog, vhdl, hardware description language]
+  risc-v:
+    category: hardware
+    aliases: [risc-v, riscv, risc v]
+  x86:
+    category: hardware
+    aliases: [x86, x86-64, x86_64, amd64]
   arm-architecture:
     category: hardware
-    aliases: [arm64, aarch64, "arm holdings", "arm architecture"]
+    aliases: [arm64, aarch64, arm holdings, arm architecture]
     ambiguous_aliases: [arm]
-    context: [cpu, chip, risc, cortex, soc, "apple silicon", neoverse]
+    context: [cpu, chip, risc, cortex, soc, apple silicon, neoverse]
   apple-silicon:
     category: hardware
-    aliases: ["apple silicon"]
+    aliases: [apple silicon]
     ambiguous_aliases: [m1, m2, m3, m4, m5]
-    context: [apple, mac, macbook, chip, imac, "mac mini"]
+    context: [apple, mac, macbook, chip, imac, mac mini]
   cpu-microarchitecture:
-    {
-      category: hardware,
-      aliases:
-        [
-          "cache coherence",
-          "branch prediction",
-          "out-of-order execution",
-          "speculative execution",
-          spectre,
-          meltdown,
-          rowhammer,
-          simd,
-          avx512,
-          "avx-512",
-        ],
-    }
+    category: hardware
+    aliases:
+      [
+        cache coherence,
+        branch prediction,
+        out-of-order execution,
+        speculative execution,
+        spectre,
+        meltdown,
+        rowhammer,
+        simd,
+        avx512,
+        avx-512,
+      ]
   semiconductors:
-    {
-      category: hardware,
-      aliases:
-        [
-          semiconductor,
-          semiconductors,
-          "chip shortage",
-          "chip fab",
-          "chip fabs",
-          foundry,
-          foundries,
-          lithography,
-          euv,
-          wafer,
-          wafers,
-          "process node",
-          3nm,
-          2nm,
-          "moore's law",
-          "moores law",
-          chiplet,
-          chiplets,
-          "advanced packaging",
-          cowos,
-        ],
-    }
+    category: hardware
+    aliases: [
+        semiconductor,
+        semiconductors,
+        chip shortage,
+        chip fab,
+        chip fabs,
+        foundry,
+        foundries,
+        lithography,
+        euv,
+        wafer,
+        wafers,
+        process node,
+        3nm,
+        2nm,
+        moore's law,
+        moores law,
+        chiplet,
+        chiplets,
+        advanced
+        packaging,
+        cowos,
+      ]
   memory-storage:
-    {
-      category: hardware,
-      aliases:
-        [
-          dram,
-          sram,
-          nand,
-          ssd,
-          ssds,
-          nvme,
-          hdd,
-          hdds,
-          "hard drive",
-          "hard drives",
-          "flash storage",
-          hbm,
-          "high bandwidth memory",
-          ddr5,
-          ddr4,
-          lpddr5,
-        ],
-    }
+    category: hardware
+    aliases:
+      [
+        dram,
+        sram,
+        nand,
+        ssd,
+        ssds,
+        nvme,
+        hdd,
+        hdds,
+        hard drive,
+        hard drives,
+        flash storage,
+        hbm,
+        high bandwidth memory,
+        ddr5,
+        ddr4,
+        lpddr5,
+      ]
   quantum:
-    {
-      category: hardware,
-      aliases:
-        [
-          "quantum computing",
-          "quantum computer",
-          "quantum computers",
-          qubit,
-          qubits,
-          "quantum supremacy",
-          "quantum advantage",
-        ],
-    }
+    category: hardware
+    aliases:
+      [
+        quantum computing,
+        quantum computer,
+        quantum computers,
+        qubit,
+        qubits,
+        quantum supremacy,
+        quantum advantage,
+      ]
   raspberry-pi:
-    {
-      category: hardware,
-      aliases: ["raspberry pi", raspberrypi, "pi zero", rp2040, rp2350],
-    }
-  arduino: { category: hardware, aliases: [arduino, platformio] }
+    category: hardware
+    aliases: [raspberry pi, raspberrypi, pi zero, rp2040, rp2350]
+  arduino:
+    category: hardware
+    aliases: [arduino, platformio]
   microcontrollers:
-    {
-      category: hardware,
-      aliases:
-        [
-          microcontroller,
-          microcontrollers,
-          esp32,
-          esp8266,
-          stm32,
-          "embedded systems",
-          "embedded system",
-          firmware,
-          rtos,
-          freertos,
-          "bare-metal",
-        ],
-    }
-  iot: { category: hardware, aliases: [iot, "internet of things"] }
+    category: hardware
+    aliases:
+      [
+        microcontroller,
+        microcontrollers,
+        esp32,
+        esp8266,
+        stm32,
+        embedded systems,
+        embedded system,
+        firmware,
+        rtos,
+        freertos,
+        bare-metal,
+      ]
+  iot:
+    category: hardware
+    aliases: [iot, internet of things]
   smart-home:
-    {
-      category: hardware,
-      aliases:
-        [
-          "smart home",
-          "smart speaker",
-          "smart speakers",
-          "home assistant",
-          homeassistant,
-          homekit,
-          "google home",
-          alexa,
-          "matter protocol",
-        ],
-    }
+    category: hardware
+    aliases: [
+        smart home,
+        smart speaker,
+        smart speakers,
+        home assistant,
+        homeassistant,
+        homekit,
+        google
+        home,
+        alexa,
+        matter protocol,
+      ]
   vr-ar:
     category: hardware
     aliases:
       [
-        "virtual reality",
-        "augmented reality",
-        "mixed reality",
-        "vr headset",
-        "vr headsets",
-        "ar glasses",
-        "vision pro",
-        "apple vision pro",
-        "meta quest",
+        virtual reality,
+        augmented reality,
+        mixed reality,
+        vr headset,
+        vr headsets,
+        ar glasses,
+        vision pro,
+        apple vision pro,
+        meta quest,
         oculus,
         hololens,
         metaverse,
-        "smart glasses",
+        smart glasses,
       ]
     ambiguous_aliases: [vr, xr]
-    context: [headset, quest, "vision pro", oculus, "mixed reality", spatial]
+    context: [headset, quest, vision pro, oculus, mixed reality, spatial]
   3d-printing:
-    {
-      category: hardware,
-      aliases:
-        [
-          "3d printing",
-          "3d printer",
-          "3d printers",
-          "3d-printed",
-          "bambu lab",
-          prusa,
-          "resin printer",
-          "resin printers",
-        ],
-    }
+    category: hardware
+    aliases: [
+        3d printing,
+        3d printer,
+        3d printers,
+        3d-printed,
+        bambu lab,
+        prusa,
+        resin printer,
+        resin
+        printers,
+      ]
   electronics:
-    {
-      category: hardware,
-      aliases:
-        [
-          kicad,
-          "pcb design",
-          "printed circuit board",
-          "circuit board",
-          soldering,
-          oscilloscope,
-          "logic analyzer",
-          breadboard,
-          "cnc machine",
-          "cnc machines",
-          "laser cutter",
-          "laser cutters",
-        ],
-    }
+    category: hardware
+    aliases: [
+        kicad,
+        pcb design,
+        printed circuit board,
+        circuit board,
+        soldering,
+        oscilloscope,
+        logic
+        analyzer,
+        breadboard,
+        cnc machine,
+        cnc machines,
+        laser cutter,
+        laser cutters,
+      ]
   ham-radio:
-    {
-      category: hardware,
-      aliases:
-        ["ham radio", "amateur radio", "software defined radio", rtl-sdr],
-    }
+    category: hardware
+    aliases: [ham radio, amateur radio, software defined radio, rtl-sdr]
   graphics:
-    {
-      category: hardware,
-      aliases:
-        [
-          opengl,
-          vulkan,
-          directx,
-          "ray tracing",
-          raytracing,
-          "path tracing",
-          shader,
-          shaders,
-          glsl,
-          wgsl,
-          hlsl,
-          "gaussian splatting",
-          "gaussian splats",
-        ],
-    }
+    category: hardware
+    aliases:
+      [
+        opengl,
+        vulkan,
+        directx,
+        ray tracing,
+        raytracing,
+        path tracing,
+        shader,
+        shaders,
+        glsl,
+        wgsl,
+        hlsl,
+        gaussian splatting,
+        gaussian splats,
+      ]
   keyboards:
-    {
-      category: hardware,
-      aliases:
-        [
-          "mechanical keyboard",
-          "mechanical keyboards",
-          qmk,
-          "split keyboard",
-          "split keyboards",
-          "keyboard layout",
-          "keyboard layouts",
-          dvorak,
-          colemak,
-        ],
-    }
+    category: hardware
+    aliases: [
+        mechanical keyboard,
+        mechanical keyboards,
+        qmk,
+        split keyboard,
+        split keyboards,
+        keyboard
+        layout,
+        keyboard layouts,
+        dvorak,
+        colemak,
+      ]
   displays:
-    {
-      category: hardware,
-      aliases:
-        [
-          oled,
-          microled,
-          "micro led",
-          e-paper,
-          epaper,
-          eink,
-          e-ink,
-          "refresh rate",
-          ultrawide,
-        ],
-    }
+    category: hardware
+    aliases:
+      [
+        oled,
+        microled,
+        micro led,
+        e-paper,
+        epaper,
+        eink,
+        e-ink,
+        refresh rate,
+        ultrawide,
+      ]
   usb-ports:
-    {
-      category: hardware,
-      aliases: [usb-c, "usb c", usb4, "usb-pd", thunderbolt, displayport, hdmi],
-    }
+    category: hardware
+    aliases: [usb-c, usb c, usb4, usb-pd, thunderbolt, displayport, hdmi]
   smartphones:
-    {
-      category: hardware,
-      aliases:
-        [
-          smartphone,
-          smartphones,
-          "android phone",
-          "android phones",
-          "foldable phone",
-          "foldable phones",
-        ],
-    }
+    category: hardware
+    aliases:
+      [
+        smartphone,
+        smartphones,
+        android phone,
+        android phones,
+        foldable phone,
+        foldable phones,
+      ]
   apple-devices:
-    {
-      category: hardware,
-      aliases:
-        [
-          ipad,
-          macbook,
-          "mac mini",
-          "mac studio",
-          "mac pro",
-          imac,
-          "apple watch",
-          airpods,
-          homepod,
-          airtag,
-        ],
-    }
+    category: hardware
+    aliases:
+      [
+        ipad,
+        macbook,
+        mac mini,
+        mac studio,
+        mac pro,
+        imac,
+        apple watch,
+        airpods,
+        homepod,
+        airtag,
+      ]
   pixel:
     category: hardware
-    aliases: ["google pixel"]
+    aliases: [google pixel]
     ambiguous_aliases: [pixel]
-    context: [google, android, phone, tensor, "pixel 9", "pixel 10"]
+    context: [google, android, phone, tensor, pixel 9, pixel 10]
   galaxy:
     category: hardware
-    aliases: ["samsung galaxy"]
+    aliases: [samsung galaxy]
     ambiguous_aliases: [galaxy]
     context: [samsung, android, phone, fold, ultra]
   laptops:
-    {
-      category: hardware,
-      aliases:
-        [
-          thinkpad,
-          "framework laptop",
-          "framework laptops",
-          "surface laptop",
-          "gaming laptop",
-          "gaming laptops",
-        ],
-    }
+    category: hardware
+    aliases:
+      [
+        thinkpad,
+        framework laptop,
+        framework laptops,
+        surface laptop,
+        gaming laptop,
+        gaming laptops,
+      ]
   wearables:
-    {
-      category: hardware,
-      aliases:
-        [
-          smartwatch,
-          smartwatches,
-          "fitness tracker",
-          "fitness trackers",
-          oura,
-          garmin,
-          fitbit,
-          "smart ring",
-          "smart rings",
-        ],
-    }
+    category: hardware
+    aliases: [
+        smartwatch,
+        smartwatches,
+        fitness tracker,
+        fitness trackers,
+        oura,
+        garmin,
+        fitbit,
+        smart
+        ring,
+        smart rings,
+      ]
   e-readers:
-    {
-      category: hardware,
-      aliases:
-        [kindle, e-reader, e-readers, ereader, "remarkable tablet", boox],
-    }
-
-  # ---------- Companies ----------
+    category: hardware
+    aliases: [kindle, e-reader, e-readers, ereader, remarkable tablet, boox]
   microsoft:
-    {
-      category: company,
-      aliases: [microsoft, msft, "microsoft 365", "office 365"],
-    }
+    category: company
+    aliases: [microsoft, msft, microsoft 365, office 365]
   google:
-    {
-      category: company,
-      aliases: [google, "google search", deepmind, "google deepmind"],
-    }
+    category: company
+    aliases: [google, google search, deepmind, google deepmind]
   apple:
     category: company
-    aliases: ["apple inc", wwdc]
+    aliases: [apple inc, wwdc]
     ambiguous_aliases: [apple]
     context:
-      [
-        iphone,
-        ipad,
-        mac,
-        macos,
-        ios,
-        "app store",
-        "tim cook",
-        siri,
-        xcode,
-        airpods,
-      ]
-  meta:
-    category: company
-    aliases: ["meta platforms", facebook, "meta ai", "reality labs"]
-    ambiguous_aliases: [meta]
-    context: [zuckerberg, instagram, whatsapp, llama, quest, threads]
+      [iphone, ipad, mac, macos, ios, app store, tim cook, siri, xcode, airpods]
   amazon:
     category: company
-    aliases: ["amazon.com", "amazon prime"]
+    aliases: [amazon.com, amazon prime]
     ambiguous_aliases: [amazon]
-    context: [aws, bezos, alexa, kindle, ec2, warehouse, "e-commerce", prime]
-  netflix: { category: company, aliases: [netflix] }
+    context: [aws, bezos, alexa, kindle, ec2, warehouse, e-commerce, prime]
+  netflix:
+    category: company
+    aliases: [netflix]
   tesla:
     category: company
-    aliases: ["tesla motors", "tesla autopilot", cybertruck]
+    aliases: [tesla motors, tesla autopilot, cybertruck]
     ambiguous_aliases: [tesla]
     context:
       [
@@ -1132,428 +1143,274 @@ technologies:
         musk,
         autopilot,
         fsd,
-        "model 3",
-        "model y",
-        "full self-driving",
+        model 3,
+        model y,
+        full self-driving,
         supercharger,
       ]
-  spacex: { category: company, aliases: [spacex] }
+  spacex:
+    category: company
+    aliases: [spacex]
   nvidia:
-    {
-      category: company,
-      aliases: [nvidia, geforce, rtx, dgx, h100, h200, b200, gb200],
-    }
+    category: company
+    aliases: [nvidia, geforce, rtx, dgx, h100, h200, b200, gb200]
   amd:
-    {
-      category: company,
-      aliases: [amd, ryzen, epyc, radeon, threadripper, mi300x],
-    }
+    category: company
+    aliases: [amd, ryzen, epyc, radeon, threadripper, mi300x]
   intel:
     category: company
     aliases:
       [
         xeon,
-        "intel core",
-        "core ultra",
-        "lunar lake",
-        "arrow lake",
-        "meteor lake",
-        "intel foundry",
+        intel core,
+        core ultra,
+        lunar lake,
+        arrow lake,
+        meteor lake,
+        intel foundry,
       ]
     ambiguous_aliases: [intel]
-    context: [cpu, chip, processor, x86, foundry, "pat gelsinger", fab, gpu]
-  qualcomm: { category: company, aliases: [qualcomm, snapdragon, broadcom] }
-  tsmc:
-    {
-      category: company,
-      aliases:
-        [
-          tsmc,
-          "taiwan semiconductor",
-          asml,
-          "global foundries",
-          globalfoundries,
-          micron,
-          "sk hynix",
-          sk-hynix,
-        ],
-    }
-  samsung:
-    {
-      category: company,
-      aliases:
-        [
-          samsung,
-          sony,
-          huawei,
-          xiaomi,
-          lenovo,
-          bytedance,
-          alibaba,
-          tencent,
-          baidu,
-        ],
-    }
-  ibm: { category: company, aliases: [ibm, "ibm watson"] }
+    context: [cpu, chip, processor, x86, foundry, pat gelsinger, fab, gpu]
+  ibm:
+    category: company
+    aliases: [ibm, ibm watson]
   oracle:
     category: company
-    aliases: ["oracle cloud", "oracle database"]
+    aliases: [oracle cloud, oracle database]
     ambiguous_aliases: [oracle]
-    context: [database, java, ellison, mysql, sql, "oracle linux"]
-  salesforce:
-    {
-      category: company,
-      aliases:
-        [
-          salesforce,
-          adobe,
-          shopify,
-          palantir,
-          twilio,
-          okta,
-          crowdstrike,
-          atlassian,
-        ],
-    }
+    context: [database, java, ellison, mysql, sql, oracle linux]
   stripe:
     category: company
-    aliases: ["stripe.com", paypal]
+    aliases: [stripe.com, paypal]
     ambiguous_aliases: [stripe]
     context: [payments, api, checkout, fintech, collison]
-  uber: { category: company, aliases: [uber, lyft, airbnb, doordash, spotify] }
-  mozilla:
-    {
-      category: company,
-      aliases:
-        [
-          mozilla,
-          wikimedia,
-          jetbrains,
-          "linux foundation",
-          cncf,
-          "apache software foundation",
-        ],
-    }
   y-combinator:
-    { category: company, aliases: ["y combinator", ycombinator, "yc batch"] }
-  softbank:
-    { category: company, aliases: [softbank, "sam altman", "elon musk"] }
+    category: company
+    aliases: [y combinator, ycombinator, yc batch]
   xai:
     category: company
     aliases: []
     ambiguous_aliases: [xai]
     context: [grok, musk, llm, model]
-  grok:
+  ai:
     category: ai-ml
-    aliases: []
-    ambiguous_aliases: [grok]
-    context: [xai, musk, llm, model, "grok 3", "grok 4", twitter]
-
-  # ---------- AI and machine learning (concepts, models, tooling) ----------
-  ai: { category: ai-ml, aliases: [ai, "artificial intelligence", "a.i."] }
+    aliases: [ai, artificial intelligence, a.i.]
   generative-ai:
-    { category: ai-ml, aliases: [genai, "generative ai", "gen ai"] }
+    category: ai-ml
+    aliases: [genai, generative ai, gen ai]
   machine-learning:
     category: ai-ml
-    aliases: ["machine learning", mlops, "ml model", "ml models"]
+    aliases: [machine learning, mlops, ml model, ml models]
     ambiguous_aliases: [ml]
     context: [model, training, neural, pytorch, dataset, inference]
   deep-learning:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "deep learning",
-          "neural network",
-          "neural networks",
-          "neural net",
-          "neural nets",
-        ],
-    }
+    category: ai-ml
+    aliases:
+      [deep learning, neural network, neural networks, neural net, neural nets]
   reinforcement-learning:
-    {
-      category: ai-ml,
-      aliases:
-        ["reinforcement learning", rlhf, "reward model", "reward hacking"],
-    }
+    category: ai-ml
+    aliases: [reinforcement learning, rlhf, reward model, reward hacking]
   transformers:
     category: ai-ml
     aliases:
       [
-        "transformer architecture",
-        "transformer model",
-        "transformer models",
-        "attention is all you need",
-        "self-attention",
+        transformer architecture,
+        transformer model,
+        transformer models,
+        attention is all you need,
+        self-attention,
       ]
     ambiguous_aliases: [transformer, transformers]
     context:
       [
         attention,
         llm,
-        "neural network",
+        neural network,
         bert,
         gpt,
-        "language model",
+        language model,
         pytorch,
-        "hugging face",
+        hugging face,
       ]
   diffusion-models:
-    {
-      category: ai-ml,
-      aliases: ["diffusion model", "diffusion models", "latent diffusion"],
-    }
-  image-generation:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "stable diffusion",
-          midjourney,
-          "dall-e",
-          dalle,
-          "image generation",
-          "text-to-image",
-          "ai art",
-        ],
-    }
-  video-generation:
     category: ai-ml
-    aliases: ["text-to-video", "video generation", veo]
-    ambiguous_aliases: [sora]
-    context: [openai, video, ai, "text-to-video"]
-  speech-ai:
+    aliases: [diffusion model, diffusion models, latent diffusion]
+  image-generation:
     category: ai-ml
     aliases:
       [
-        "speech recognition",
-        "speech-to-text",
-        "text-to-speech",
-        "voice assistant",
-        "voice assistants",
-        "voice ai",
+        stable diffusion,
+        midjourney,
+        dall-e,
+        dalle,
+        image generation,
+        text-to-image,
+        ai art,
+      ]
+  speech-ai:
+    category: ai-ml
+    aliases: [
+        speech recognition,
+        speech-to-text,
+        text-to-speech,
+        voice assistant,
+        voice assistants,
+        voice
+        ai,
       ]
     ambiguous_aliases: [whisper, tts]
-    context: [openai, speech, audio, transcription, voice, "text-to-speech"]
+    context: [openai, speech, audio, transcription, voice, text-to-speech]
   computer-vision:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "computer vision",
-          "image recognition",
-          opencv,
-          "object detection",
-          "image classification",
-        ],
-    }
-  nlp: { category: ai-ml, aliases: [nlp, "natural language processing"] }
+    category: ai-ml
+    aliases:
+      [
+        computer vision,
+        image recognition,
+        opencv,
+        object detection,
+        image classification,
+      ]
+  nlp:
+    category: ai-ml
+    aliases: [nlp, natural language processing]
   embeddings:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          embeddings,
-          "text embeddings",
-          "embedding model",
-          "embedding models",
-          "semantic search",
-        ],
-    }
-  vector-database:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "vector database",
-          "vector databases",
-          "vector db",
-          "vector search",
-          weaviate,
-          chroma,
-          milvus,
-          "faiss",
-        ],
-    }
+    category: ai-ml
+    aliases:
+      [
+        embeddings,
+        text embeddings,
+        embedding model,
+        embedding models,
+        semantic search,
+      ]
   fine-tuning:
     category: ai-ml
-    aliases: ["fine-tuning", "fine tuning", finetuning, qlora, peft]
+    aliases: [fine-tuning, fine tuning, finetuning, qlora, peft]
     ambiguous_aliases: [lora]
-    context: [llm, adapter, model, "language model", training]
+    context: [llm, adapter, model, language model, training]
   prompt-engineering:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "prompt engineering",
-          "system prompt",
-          "system prompts",
-          "few-shot",
-          "zero-shot",
-        ],
-    }
+    category: ai-ml
+    aliases:
+      [prompt engineering, system prompt, system prompts, few-shot, zero-shot]
   ai-agents:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "ai agent",
-          "ai agents",
-          agentic,
-          "agentic ai",
-          "coding agent",
-          "coding agents",
-          "multi-agent",
-        ],
-    }
+    category: ai-ml
+    aliases:
+      [
+        ai agent,
+        ai agents,
+        agentic,
+        agentic ai,
+        coding agent,
+        coding agents,
+        multi-agent,
+      ]
   vibe-coding:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "vibe coding",
-          "vibe-coding",
-          vibecoding,
-          "ai coding",
-          "ai-assisted coding",
-          "ai pair programming",
-          "coding assistant",
-          "coding assistants",
-          "agentic coding",
-          "lovable.dev",
-          "bolt.new",
-          "v0.dev",
-          "replit agent",
-        ],
-    }
+    category: ai-ml
+    aliases:
+      [
+        vibe coding,
+        vibe-coding,
+        vibecoding,
+        ai coding,
+        ai-assisted coding,
+        ai pair programming,
+        coding assistant,
+        coding assistants,
+        agentic coding,
+        lovable.dev,
+        bolt.new,
+        v0.dev,
+        replit agent,
+      ]
   llm-inference:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "llm inference",
-          "model inference",
-          "inference engine",
-          quantization,
-          quantized,
-          "speculative decoding",
-          "kv cache",
-          "flash attention",
-          flashattention,
-          vllm,
-          gguf,
-          ggml,
-          onnx,
-          "onnx runtime",
-        ],
-    }
+    category: ai-ml
+    aliases:
+      [
+        llm inference,
+        model inference,
+        inference engine,
+        quantization,
+        quantized,
+        speculative decoding,
+        kv cache,
+        flash attention,
+        flashattention,
+        vllm,
+        gguf,
+        ggml,
+        onnx,
+        onnx runtime,
+      ]
   context-window:
-    {
-      category: ai-ml,
-      aliases:
-        ["context window", "context length", "long context", "context windows"],
-    }
+    category: ai-ml
+    aliases: [context window, context length, long context, context windows]
   tokenization:
-    {
-      category: ai-ml,
-      aliases: [tokenizer, tokenizers, bpe, "byte pair encoding", tiktoken],
-    }
+    category: ai-ml
+    aliases: [tokenizer, tokenizers, bpe, byte pair encoding, tiktoken]
   llm-benchmarks:
-    {
-      category: ai-ml,
-      aliases:
-        [swe-bench, mmlu, "chatbot arena", lmarena, arc-agi, humaneval, gpqa],
-    }
+    category: ai-ml
+    aliases: [swe-bench, mmlu, chatbot arena, lmarena, arc-agi, humaneval, gpqa]
   reasoning-models:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "reasoning model",
-          "reasoning models",
-          "chain of thought",
-          "chain-of-thought",
-          "test-time compute",
-          "thinking model",
-        ],
-    }
+    category: ai-ml
+    aliases:
+      [
+        reasoning model,
+        reasoning models,
+        chain of thought,
+        chain-of-thought,
+        test-time compute,
+        thinking model,
+      ]
   multimodal:
-    {
-      category: ai-ml,
-      aliases: [multimodal, "vision language model", "vision-language"],
-    }
+    category: ai-ml
+    aliases: [multimodal, vision language model, vision-language]
   synthetic-data:
-    { category: ai-ml, aliases: ["synthetic data", "model collapse"] }
+    category: ai-ml
+    aliases: [synthetic data, model collapse]
   distillation:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          distillation,
-          "knowledge distillation",
-          "distilled model",
-          "distilled models",
-        ],
-    }
+    category: ai-ml
+    aliases:
+      [distillation, knowledge distillation, distilled model, distilled models]
   scaling-laws:
-    {
-      category: ai-ml,
-      aliases: ["scaling laws", "scaling law", chinchilla, "bitter lesson"],
-    }
+    category: ai-ml
+    aliases: [scaling laws, scaling law, chinchilla, bitter lesson]
   model-training:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          pretraining,
-          pre-training,
-          post-training,
-          "training data",
-          "training run",
-          "gpu cluster",
-          "gpu clusters",
-        ],
-    }
+    category: ai-ml
+    aliases: [
+        pretraining,
+        pre-training,
+        post-training,
+        training data,
+        training run,
+        gpu cluster,
+        gpu
+        clusters,
+      ]
   open-weights:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "open weights",
-          open-weight,
-          "open weight model",
-          "open-weight models",
-        ],
-    }
-  ai-bubble: { category: ai-ml, aliases: ["ai bubble", "ai hype", "ai winter"] }
+    category: ai-ml
+    aliases: [open weights, open-weight, open weight model, open-weight models]
+  ai-bubble:
+    category: ai-ml
+    aliases: [ai bubble, ai hype, ai winter]
   agi:
-    {
-      category: ai-ml,
-      aliases: [agi, "artificial general intelligence", superintelligence],
-    }
+    category: ai-ml
+    aliases: [agi, artificial general intelligence, superintelligence]
   hallucination:
     category: ai-ml
     aliases: []
     ambiguous_aliases: [hallucination, hallucinations]
-    context: [llm, ai, model, chatgpt, gpt, "language model"]
+    context: [llm, ai, model, chatgpt, gpt, language model]
   gpt:
-    { category: ai-ml, aliases: [gpt, "gpt-3", "gpt-3.5", "gpt-4o", "gpt-oss"] }
-  qwen: { category: ai-ml, aliases: [qwen, gemma, "moonshot ai"] }
-  kimi:
     category: ai-ml
-    aliases: []
-    ambiguous_aliases: [kimi]
-    context: [moonshot, llm, model, "kimi k2"]
+    aliases: [gpt, gpt-3, gpt-3.5, gpt-4o, gpt-oss]
   perplexity:
     category: ai-ml
-    aliases: ["perplexity.ai", "perplexity ai"]
+    aliases: [perplexity.ai, perplexity ai]
     ambiguous_aliases: [perplexity]
-    context: [search, llm, "answer engine", srinivas]
+    context: [search, llm, answer engine, srinivas]
   notebooklm:
-    {
-      category: ai-ml,
-      aliases: [notebooklm, "microsoft copilot", "copilot studio"],
-    }
+    category: ai-ml
+    aliases: [notebooklm, microsoft copilot, copilot studio]
   windsurf:
     category: ai-ml
     aliases: []
@@ -1561,941 +1418,714 @@ technologies:
     context: [ai, ide, codeium, editor, cognition]
   devin:
     category: ai-ml
-    aliases: ["devin ai", "cognition ai"]
+    aliases: [devin ai, cognition ai]
     ambiguous_aliases: [devin]
-    context: [cognition, ai, agent, "software engineer"]
-  openrouter: { category: ai-ml, aliases: [openrouter, groq, cerebras] }
-  cuda: { category: ai-ml, aliases: [cuda, rocm, "cuda toolkit"] }
+    context: [cognition, ai, agent, software engineer]
+  openrouter:
+    category: ai-ml
+    aliases: [openrouter, groq, cerebras]
+  cuda:
+    category: ai-ml
+    aliases: [cuda, rocm, cuda toolkit]
   mlx:
     category: ai-ml
-    aliases: ["mlx-lm", "apple mlx"]
+    aliases: [mlx-lm, apple mlx]
     ambiguous_aliases: [mlx]
-    context: [apple, llm, model, "apple silicon", array]
+    context: [apple, llm, model, apple silicon, array]
   jax:
     category: ai-ml
-    aliases: ["jax.numpy"]
+    aliases: [jax.numpy]
     ambiguous_aliases: [jax]
     context: [google, python, numpy, autodiff, xla]
-  keras:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          keras,
-          "scikit-learn",
-          sklearn,
-          "scikit learn",
-          xgboost,
-          lightgbm,
-          catboost,
-        ],
-    }
-  llamaindex: { category: ai-ml, aliases: [llamaindex, "llama index", dspy] }
+  llamaindex:
+    category: ai-ml
+    aliases: [llamaindex, llama index, dspy]
   self-driving:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          "self-driving",
-          "self driving",
-          "autonomous driving",
-          "autonomous vehicle",
-          "autonomous vehicles",
-          waymo,
-          robotaxi,
-          robotaxis,
-          "full self-driving",
-        ],
-    }
+    category: ai-ml
+    aliases:
+      [
+        self-driving,
+        self driving,
+        autonomous driving,
+        autonomous vehicle,
+        autonomous vehicles,
+        waymo,
+        robotaxi,
+        robotaxis,
+        full self-driving,
+      ]
   ai-safety:
-    {
-      category: policy,
-      aliases:
-        [
-          "ai safety",
-          "ai alignment",
-          "alignment problem",
-          "ai risk",
-          "existential risk",
-          x-risk,
-          "ai doom",
-          superalignment,
-          "ai ethics",
-          "responsible ai",
-        ],
-    }
+    category: policy
+    aliases:
+      [
+        ai safety,
+        ai alignment,
+        alignment problem,
+        ai risk,
+        existential risk,
+        x-risk,
+        ai doom,
+        superalignment,
+        ai ethics,
+        responsible ai,
+      ]
   ai-regulation:
-    {
-      category: policy,
-      aliases:
-        [
-          "ai act",
-          "eu ai act",
-          "ai regulation",
-          "ai regulations",
-          "ai policy",
-          "ai governance",
-        ],
-    }
+    category: policy
+    aliases:
+      [
+        ai act,
+        eu ai act,
+        ai regulation,
+        ai regulations,
+        ai policy,
+        ai governance,
+      ]
   ai-copyright:
-    {
-      category: policy,
-      aliases:
-        [
-          "ai copyright",
-          "copyright and ai",
-          "training data lawsuit",
-          "fair use ai",
-        ],
-    }
+    category: policy
+    aliases:
+      [ai copyright, copyright and ai, training data lawsuit, fair use ai]
   deepfakes:
-    {
-      category: ai-ml,
-      aliases:
-        [
-          deepfake,
-          deepfakes,
-          "voice cloning",
-          "voice clone",
-          "ai slop",
-          "synthetic media",
-        ],
-    }
-
-  # ---------- Security ----------
+    category: ai-ml
+    aliases:
+      [
+        deepfake,
+        deepfakes,
+        voice cloning,
+        voice clone,
+        ai slop,
+        synthetic media,
+      ]
   cybersecurity:
-    {
-      category: security,
-      aliases:
-        [
-          cybersecurity,
-          infosec,
-          "information security",
-          cyberattack,
-          cyberattacks,
-          "cyber attack",
-          "cyber attacks",
-          "cyber security",
-          "threat actor",
-          "threat actors",
-        ],
-    }
-  ransomware: { category: security, aliases: [ransomware, "ransom payment"] }
+    category: security
+    aliases: [
+        cybersecurity,
+        infosec,
+        information security,
+        cyberattack,
+        cyberattacks,
+        cyber attack,
+        cyber
+        attacks,
+        cyber security,
+        threat actor,
+        threat actors,
+      ]
+  ransomware:
+    category: security
+    aliases: [ransomware, ransom payment]
   malware:
-    {
-      category: security,
-      aliases:
-        [
-          malware,
-          spyware,
-          botnet,
-          botnets,
-          rootkit,
-          infostealer,
-          "info stealer",
-          keylogger,
-        ],
-    }
+    category: security
+    aliases:
+      [
+        malware,
+        spyware,
+        botnet,
+        botnets,
+        rootkit,
+        infostealer,
+        info stealer,
+        keylogger,
+      ]
   vulnerabilities:
-    {
-      category: security,
-      aliases:
-        [
-          vulnerability,
-          vulnerabilities,
-          "security flaw",
-          "security hole",
-          "security patch",
-          "security patches",
-          cve,
-          cves,
-          "remote code execution",
-          "privilege escalation",
-          "buffer overflow",
-          "sql injection",
-          xss,
-          csrf,
-        ],
-    }
+    category: security
+    aliases:
+      [
+        vulnerability,
+        vulnerabilities,
+        security flaw,
+        security hole,
+        security patch,
+        security patches,
+        cve,
+        cves,
+        remote code execution,
+        privilege escalation,
+        buffer overflow,
+        sql injection,
+        xss,
+        csrf,
+      ]
   zero-day:
-    { category: security, aliases: ["zero-day", "zero day", "0-day", "0day"] }
+    category: security
+    aliases: [zero-day, zero day, 0-day, 0day]
   data-breach:
-    {
-      category: security,
-      aliases:
-        [
-          "data breach",
-          "data breaches",
-          "data leak",
-          "data leaks",
-          "credential leak",
-          "credential leaks",
-        ],
-    }
+    category: security
+    aliases:
+      [
+        data breach,
+        data breaches,
+        data leak,
+        data leaks,
+        credential leak,
+        credential leaks,
+      ]
   supply-chain-attack:
-    {
-      category: security,
-      aliases:
-        [
-          "supply chain attack",
-          "supply-chain attack",
-          "supply chain attacks",
-          "software supply chain",
-          typosquatting,
-          sbom,
-          "software bill of materials",
-          slsa,
-        ],
-    }
+    category: security
+    aliases:
+      [
+        supply chain attack,
+        supply-chain attack,
+        supply chain attacks,
+        software supply chain,
+        typosquatting,
+        sbom,
+        software bill of materials,
+        slsa,
+      ]
   encryption:
-    {
-      category: security,
-      aliases:
-        [
-          encryption,
-          "end-to-end encryption",
-          e2ee,
-          "e2e encryption",
-          cryptography,
-          "public-key",
-          "public key",
-        ],
-    }
+    category: security
+    aliases: [
+        encryption,
+        end-to-end encryption,
+        e2ee,
+        e2e encryption,
+        cryptography,
+        public-key,
+        public
+        key,
+      ]
   post-quantum:
-    {
-      category: security,
-      aliases:
-        [
-          "post-quantum",
-          "post quantum",
-          pqc,
-          "quantum-safe",
-          "quantum safe",
-          "harvest now decrypt later",
-        ],
-    }
+    category: security
+    aliases:
+      [
+        post-quantum,
+        post quantum,
+        pqc,
+        quantum-safe,
+        quantum safe,
+        harvest now decrypt later,
+      ]
   passkeys:
-    {
-      category: security,
-      aliases:
-        [
-          passkey,
-          passkeys,
-          webauthn,
-          fido2,
-          "security key",
-          "security keys",
-          yubikey,
-        ],
-    }
+    category: security
+    aliases:
+      [passkey, passkeys, webauthn, fido2, security key, security keys, yubikey]
   two-factor:
-    {
-      category: security,
-      aliases:
-        [2fa, "two-factor", "two factor", mfa, "multi-factor", "multi factor"],
-    }
+    category: security
+    aliases: [2fa, two-factor, two factor, mfa, multi-factor, multi factor]
   password-manager:
-    {
-      category: security,
-      aliases:
-        [
-          "password manager",
-          "password managers",
-          bitwarden,
-          1password,
-          keepass,
-          lastpass,
-        ],
-    }
+    category: security
+    aliases:
+      [
+        password manager,
+        password managers,
+        bitwarden,
+        1password,
+        keepass,
+        lastpass,
+      ]
   vpn:
-    {
-      category: networking,
-      aliases: [vpn, vpns, wireguard, openvpn, tailscale, zerotier, "mesh vpn"],
-    }
+    category: networking
+    aliases: [vpn, vpns, wireguard, openvpn, tailscale, zerotier, mesh vpn]
   tor:
     category: security
-    aliases: ["tor browser", "tor network"]
+    aliases: [tor browser, tor network]
     ambiguous_aliases: [tor]
-    context: [onion, anonymity, "dark web", relay, anonymous]
+    context: [onion, anonymity, dark web, relay, anonymous]
   oauth-sso:
-    {
-      category: security,
-      aliases: [oauth, oauth2, openid, oidc, saml, sso, "single sign-on"],
-    }
+    category: security
+    aliases: [oauth, oauth2, openid, oidc, saml, sso, single sign-on]
   zero-trust:
-    { category: security, aliases: ["zero trust", zerotrust, "zero-trust"] }
+    category: security
+    aliases: [zero trust, zerotrust, zero-trust]
   pentesting:
-    {
-      category: security,
-      aliases:
-        [
-          "penetration testing",
-          pentest,
-          pentesting,
-          "red team",
-          "bug bounty",
-          "bug bounties",
-        ],
-    }
-  ddos: { category: security, aliases: [ddos, "denial of service"] }
+    category: security
+    aliases:
+      [
+        penetration testing,
+        pentest,
+        pentesting,
+        red team,
+        bug bounty,
+        bug bounties,
+      ]
+  ddos:
+    category: security
+    aliases: [ddos, denial of service]
   phishing:
-    { category: security, aliases: [phishing, "social engineering", smishing] }
+    category: security
+    aliases: [phishing, social engineering, smishing]
   tls-ssl:
-    {
-      category: security,
-      aliases:
-        [
-          tls,
-          ssl,
-          "let's encrypt",
-          "lets encrypt",
-          openssl,
-          libressl,
-          boringssl,
-        ],
-    }
+    category: security
+    aliases:
+      [tls, ssl, let's encrypt, lets encrypt, openssl, libressl, boringssl]
   memory-safety:
-    {
-      category: security,
-      aliases:
-        [
-          "memory safety",
-          "memory-safe",
-          "memory unsafe",
-          "memory safe language",
-          "memory-safe languages",
-          "use after free",
-          "use-after-free",
-        ],
-    }
+    category: security
+    aliases:
+      [
+        memory safety,
+        memory-safe,
+        memory unsafe,
+        memory safe language,
+        memory-safe languages,
+        use after free,
+        use-after-free,
+      ]
   privacy:
-    {
-      category: policy,
-      aliases:
-        [
-          privacy,
-          gdpr,
-          ccpa,
-          "data protection",
-          "data privacy",
-          "cookie banner",
-          "cookie banners",
-          "cookie consent",
-          "third-party cookies",
-          "privacy sandbox",
-          "browser fingerprinting",
-        ],
-    }
+    category: policy
+    aliases: [
+        privacy,
+        gdpr,
+        ccpa,
+        data protection,
+        data privacy,
+        cookie banner,
+        cookie banners,
+        cookie
+        consent,
+        third-party cookies,
+        privacy sandbox,
+        browser fingerprinting,
+      ]
   surveillance:
-    {
-      category: policy,
-      aliases:
-        [
-          surveillance,
-          "facial recognition",
-          "face recognition",
-          "mass surveillance",
-          "nso group",
-        ],
-    }
-
-  # ---------- Crypto and blockchain ----------
-  cryptocurrency:
+    category: policy
+    aliases:
+      [
+        surveillance,
+        facial recognition,
+        face recognition,
+        mass surveillance,
+        nso group,
+      ]
+  bitcoin:
+    category: crypto
+    aliases: [bitcoin, btc, bitcoin etf, lightning network]
+  ethereum:
+    category: crypto
+    aliases: [ethereum, evm, ethereum merge]
+  blockchain:
+    category: crypto
+    aliases: [blockchain, blockchains, distributed ledger, layer 2, layer-2]
+  smart-contracts:
+    category: crypto
+    aliases: [smart contract, smart contracts, solidity, vyper]
+  defi:
     category: crypto
     aliases:
       [
-        cryptocurrency,
-        cryptocurrencies,
-        "crypto currency",
-        "crypto wallet",
-        "crypto exchange",
-        "crypto exchanges",
-        altcoin,
-        altcoins,
-        memecoin,
-        memecoins,
-        "meme coin",
-        "meme coins",
-        "rug pull",
-      ]
-    ambiguous_aliases: [crypto, coin, coins]
-    context:
-      [
-        market,
-        markets,
-        price,
-        trading,
-        exchange,
-        wallet,
-        token,
-        tokens,
-        blockchain,
-        bitcoin,
-        ethereum,
         defi,
-        nft,
-        nfts,
-        investors,
-        scam,
-        scams,
-        binance,
-        coinbase,
-        stablecoin,
+        decentralized finance,
+        yield farming,
+        liquidity pool,
+        liquidity pools,
+        uniswap,
+        aave,
       ]
-  bitcoin:
-    {
-      category: crypto,
-      aliases: [bitcoin, btc, "bitcoin etf", "lightning network"],
-    }
-  ethereum: { category: crypto, aliases: [ethereum, evm, "ethereum merge"] }
-  solana:
-    {
-      category: crypto,
-      aliases:
-        [solana, cardano, polkadot, dogecoin, litecoin, monero, zcash, xrp],
-    }
-  blockchain:
-    {
-      category: crypto,
-      aliases:
-        [blockchain, blockchains, "distributed ledger", "layer 2", "layer-2"],
-    }
-  smart-contracts:
-    {
-      category: crypto,
-      aliases: ["smart contract", "smart contracts", solidity, vyper],
-    }
-  defi:
-    {
-      category: crypto,
-      aliases:
-        [
-          defi,
-          "decentralized finance",
-          "yield farming",
-          "liquidity pool",
-          "liquidity pools",
-          uniswap,
-          aave,
-        ],
-    }
-  nft: { category: crypto, aliases: [nft, nfts, "non-fungible"] }
+  nft:
+    category: crypto
+    aliases: [nft, nfts, non-fungible]
   web3:
-    {
-      category: crypto,
-      aliases: [web3, dapp, dapps, "decentralized app", "decentralized apps"],
-    }
+    category: crypto
+    aliases: [web3, dapp, dapps, decentralized app, decentralized apps]
   stablecoins:
-    {
-      category: crypto,
-      aliases:
-        [
-          stablecoin,
-          stablecoins,
-          usdt,
-          usdc,
-          cbdc,
-          "central bank digital currency",
-        ],
-    }
-  crypto-exchanges: { category: crypto, aliases: [coinbase, binance, ftx] }
+    category: crypto
+    aliases:
+      [stablecoin, stablecoins, usdt, usdc, cbdc, central bank digital currency]
+  crypto-exchanges:
+    category: crypto
+    aliases: [coinbase, binance, ftx]
   crypto-mining:
-    {
-      category: crypto,
-      aliases:
-        [
-          "bitcoin mining",
-          "crypto mining",
-          cryptomining,
-          hashrate,
-          "proof of work",
-          "proof-of-work",
-          "proof of stake",
-          "proof-of-stake",
-        ],
-    }
+    category: crypto
+    aliases: [
+        bitcoin mining,
+        crypto mining,
+        cryptomining,
+        hashrate,
+        proof of work,
+        proof-of-work,
+        proof
+        of stake,
+        proof-of-stake,
+      ]
   fintech:
-    {
-      category: industry,
-      aliases:
-        [
-          fintech,
-          "digital payments",
-          "open banking",
-          neobank,
-          neobanks,
-          "mobile payments",
-          "contactless payment",
-          "apple pay",
-          "google pay",
-        ],
-    }
-
-  # ---------- Data ----------
+    category: industry
+    aliases: [
+        fintech,
+        digital payments,
+        open banking,
+        neobank,
+        neobanks,
+        mobile payments,
+        contactless
+        payment,
+        apple pay,
+        google pay,
+      ]
   big-data:
-    {
-      category: data,
-      aliases:
-        [
-          "big data",
-          "data warehouse",
-          "data warehouses",
-          "data lake",
-          "data lakes",
-          lakehouse,
-          "data pipeline",
-          "data pipelines",
-          etl,
-          elt,
-          "data engineering",
-          "data engineer",
-        ],
-    }
-  spark:
-    {
-      category: data,
-      aliases:
-        [
-          "apache spark",
-          pyspark,
-          kafka,
-          redpanda,
-          "event streaming",
-          flink,
-          "apache flink",
-        ],
-    }
-  airflow:
-    { category: data, aliases: [airflow, dagster, dbt, "data build tool"] }
-  hadoop: { category: data, aliases: [hadoop, hdfs, mapreduce, trino, presto] }
+    category: data
+    aliases:
+      [
+        big data,
+        data warehouse,
+        data warehouses,
+        data lake,
+        data lakes,
+        lakehouse,
+        data pipeline,
+        data pipelines,
+        etl,
+        elt,
+        data engineering,
+        data engineer,
+      ]
   snowflake:
     category: data
     aliases: [databricks]
     ambiguous_aliases: [snowflake]
-    context: [data, warehouse, sql, cloud, "data cloud"]
+    context: [data, warehouse, sql, cloud, data cloud]
   table-formats:
-    {
-      category: data,
-      aliases:
-        [
-          "apache iceberg",
-          "delta lake",
-          "apache hudi",
-          parquet,
-          "apache arrow",
-        ],
-    }
-  bigquery: { category: data, aliases: [bigquery, redshift, "amazon athena"] }
+    category: data
+    aliases: [apache iceberg, delta lake, apache hudi, parquet, apache arrow]
+  bigquery:
+    category: data
+    aliases: [bigquery, redshift, amazon athena]
   pandas:
     category: data
     aliases: [dataframe, dataframes]
     ambiguous_aliases: [pandas]
-    context: [python, numpy, "data frame", jupyter, df]
+    context: [python, numpy, data frame, jupyter, df]
   polars:
     category: data
     aliases: []
     ambiguous_aliases: [polars]
-    context: [dataframe, rust, python, "data frame"]
+    context: [dataframe, rust, python, data frame]
   jupyter:
-    {
-      category: data,
-      aliases:
-        [
-          jupyter,
-          ipynb,
-          "jupyter notebook",
-          "jupyter notebooks",
-          jupyterlab,
-          "google colab",
-          marimo,
-        ],
-    }
+    category: data
+    aliases:
+      [
+        jupyter,
+        ipynb,
+        jupyter notebook,
+        jupyter notebooks,
+        jupyterlab,
+        google colab,
+        marimo,
+      ]
   data-science:
-    {
-      category: data,
-      aliases:
-        [
-          "data science",
-          "data scientist",
-          "data scientists",
-          "data analysis",
-          "data analytics",
-          "business intelligence",
-          "power bi",
-          tableau,
-          looker,
-          metabase,
-          "apache superset",
-          "data visualization",
-          "data visualisation",
-        ],
-    }
+    category: data
+    aliases:
+      [
+        data science,
+        data scientist,
+        data scientists,
+        data analysis,
+        data analytics,
+        business intelligence,
+        power bi,
+        tableau,
+        looker,
+        metabase,
+        apache superset,
+        data visualization,
+        data visualisation,
+      ]
   time-series:
-    {
-      category: data,
-      aliases:
-        [
-          "time series",
-          "time-series",
-          timeseries,
-          influxdb,
-          timescaledb,
-          questdb,
-          victoriametrics,
-          "time series database",
-        ],
-    }
+    category: data
+    aliases: [
+        time series,
+        time-series,
+        timeseries,
+        influxdb,
+        timescaledb,
+        questdb,
+        victoriametrics,
+        time
+        series database,
+      ]
   search-engines:
-    {
-      category: data,
-      aliases:
-        [
-          elasticsearch,
-          opensearch,
-          lucene,
-          solr,
-          meilisearch,
-          typesense,
-          "full-text search",
-          "full text search",
-          bm25,
-        ],
-    }
+    category: data
+    aliases: [
+        elasticsearch,
+        opensearch,
+        lucene,
+        solr,
+        meilisearch,
+        typesense,
+        full-text search,
+        full
+        text search,
+        bm25,
+      ]
   graph-databases:
-    {
-      category: database,
-      aliases:
-        [
-          "knowledge graph",
-          "knowledge graphs",
-          "graph database",
-          "graph databases",
-          neo4j,
-          sparql,
-          rdf,
-          "semantic web",
-        ],
-    }
-  cassandra: { category: database, aliases: [cassandra, scylladb, dynamodb] }
+    category: database
+    aliases:
+      [
+        knowledge graph,
+        knowledge graphs,
+        graph database,
+        graph databases,
+        neo4j,
+        sparql,
+        rdf,
+        semantic web,
+      ]
   newsql:
-    {
-      category: database,
-      aliases:
-        [
-          cockroachdb,
-          "cockroach labs",
-          yugabyte,
-          yugabytedb,
-          tidb,
-          "google spanner",
-          "cloud spanner",
-          vitess,
-          planetscale,
-        ],
-    }
-  coordination: { category: database, aliases: [etcd, zookeeper, memcached] }
+    category: database
+    aliases:
+      [
+        cockroachdb,
+        cockroach labs,
+        yugabyte,
+        yugabytedb,
+        tidb,
+        google spanner,
+        cloud spanner,
+        vitess,
+        planetscale,
+      ]
+  coordination:
+    category: database
+    aliases: [etcd, zookeeper, memcached]
   storage-engines:
-    {
-      category: database,
-      aliases:
-        [
-          rocksdb,
-          leveldb,
-          lmdb,
-          "lsm tree",
-          "lsm-tree",
-          "b-tree",
-          "b-trees",
-          "storage engine",
-          "storage engines",
-        ],
-    }
+    category: database
+    aliases:
+      [
+        rocksdb,
+        leveldb,
+        lmdb,
+        lsm tree,
+        lsm-tree,
+        b-tree,
+        b-trees,
+        storage engine,
+        storage engines,
+      ]
   sql-server:
-    {
-      category: database,
-      aliases: ["sql server", mssql, "microsoft sql server"],
-    }
+    category: database
+    aliases: [sql server, mssql, microsoft sql server]
   baas:
-    {
-      category: database,
-      aliases: [pocketbase, appwrite, "backend as a service", turso, libsql],
-    }
+    category: database
+    aliases: [pocketbase, appwrite, backend as a service, turso, libsql]
   object-storage:
-    {
-      category: cloud-devops,
-      aliases: [s3, "object storage", minio, backblaze, "amazon s3"],
-    }
+    category: cloud-devops
+    aliases: [s3, object storage, minio, backblaze, amazon s3]
   distributed-systems:
-    {
-      category: engineering,
-      aliases:
-        [
-          "distributed systems",
-          "distributed system",
-          "consensus algorithm",
-          "raft consensus",
-          paxos,
-          crdt,
-          crdts,
-          "cap theorem",
-          "eventual consistency",
-          "local-first",
-          "local first",
-          "sync engine",
-        ],
-    }
-
-  # ---------- Networking and protocols ----------
+    category: engineering
+    aliases:
+      [
+        distributed systems,
+        distributed system,
+        consensus algorithm,
+        raft consensus,
+        paxos,
+        crdt,
+        crdts,
+        cap theorem,
+        eventual consistency,
+        local-first,
+        local first,
+        sync engine,
+      ]
   ip-addressing:
-    {
-      category: networking,
-      aliases: [ipv6, ipv4, "ip address", "ip addresses"],
-    }
-  dns: { category: networking, aliases: [dns, "dns over https", dnssec] }
+    category: networking
+    aliases: [ipv6, ipv4, ip address, ip addresses]
+  dns:
+    category: networking
+    aliases: [dns, dns over https, dnssec]
   http-protocols:
-    { category: networking, aliases: ["http/2", "http/3", http2, http3, quic] }
-  tcp-udp: { category: networking, aliases: [tcp, udp, "tcp/ip"] }
+    category: networking
+    aliases: [http/2, http/3, http2, http3, quic]
+  tcp-udp:
+    category: networking
+    aliases: [tcp, udp, tcp/ip]
   bgp:
-    { category: networking, aliases: [bgp, "route leak", "internet routing"] }
-  wifi: { category: networking, aliases: [wi-fi, wifi, "wi-fi 7", "wifi 7"] }
-  bluetooth: { category: networking, aliases: [bluetooth] }
+    category: networking
+    aliases: [bgp, route leak, internet routing]
+  wifi:
+    category: networking
+    aliases: [wi-fi, wifi, wi-fi 7, wifi 7]
+  bluetooth:
+    category: networking
+    aliases: [bluetooth]
   cellular:
-    {
-      category: networking,
-      aliases:
-        [
-          5g,
-          6g,
-          lte,
-          "cell tower",
-          "cell towers",
-          "mobile network",
-          "mobile networks",
-        ],
-    }
-  starlink: { category: networking, aliases: [starlink, "satellite internet"] }
-  fiber:
-    {
-      category: networking,
-      aliases: [fiber, fibre, ftth, "fiber internet", "fibre optic"],
-    }
+    category: networking
+    aliases:
+      [5g, 6g, lte, cell tower, cell towers, mobile network, mobile networks]
+  starlink:
+    category: networking
+    aliases: [starlink, satellite internet]
   isp:
-    {
-      category: networking,
-      aliases:
-        [isp, isps, "internet service provider", "internet service providers"],
-    }
+    category: networking
+    aliases: [isp, isps, internet service provider, internet service providers]
   cdn:
-    {
-      category: networking,
-      aliases: [cdn, cdns, akamai, fastly, "content delivery network"],
-    }
+    category: networking
+    aliases: [cdn, cdns, akamai, fastly, content delivery network]
   websockets:
-    {
-      category: networking,
-      aliases:
-        [websocket, websockets, "server-sent events", webrtc, "peer-to-peer"],
-    }
-  mqtt: { category: networking, aliases: [mqtt, coap, zigbee, z-wave] }
+    category: networking
+    aliases: [websocket, websockets, server-sent events, webrtc, peer-to-peer]
+  mqtt:
+    category: networking
+    aliases: [mqtt, coap, zigbee, z-wave]
   mesh-networking:
-    {
-      category: networking,
-      aliases: ["mesh network", "mesh networks", meshtastic],
-    }
+    category: networking
+    aliases: [mesh network, mesh networks, meshtastic]
   fediverse:
-    {
-      category: platform,
-      aliases:
-        [
-          fediverse,
-          activitypub,
-          mastodon,
-          bluesky,
-          atproto,
-          "at protocol",
-          "matrix protocol",
-          "matrix.org",
-          nostr,
-          "decentralized social",
-        ],
-    }
+    category: platform
+    aliases:
+      [
+        fediverse,
+        activitypub,
+        mastodon,
+        bluesky,
+        atproto,
+        at protocol,
+        matrix protocol,
+        matrix.org,
+        nostr,
+        decentralized social,
+      ]
   email:
-    {
-      category: networking,
-      aliases:
-        [
-          smtp,
-          imap,
-          dkim,
-          dmarc,
-          jmap,
-          "email deliverability",
-          gmail,
-          "proton mail",
-          protonmail,
-          fastmail,
-          "email client",
-          "email clients",
-        ],
-    }
-  rss: { category: networking, aliases: [rss, "rss feed", "rss feeds"] }
-
-  # ---------- Browsers and web platform ----------
+    category: networking
+    aliases:
+      [
+        smtp,
+        imap,
+        dkim,
+        dmarc,
+        jmap,
+        email deliverability,
+        gmail,
+        proton mail,
+        protonmail,
+        fastmail,
+        email client,
+        email clients,
+      ]
+  rss:
+    category: networking
+    aliases: [rss, rss feed, rss feeds]
   chrome:
     category: browser
-    aliases: ["google chrome", chromium]
+    aliases: [google chrome, chromium]
     ambiguous_aliases: [chrome]
-    context:
-      [browser, google, extension, devtools, "web store", "chrome extension"]
-  firefox: { category: browser, aliases: [firefox] }
+    context: [browser, google, extension, devtools, web store, chrome extension]
+  firefox:
+    category: browser
+    aliases: [firefox]
   safari:
     category: browser
-    aliases: ["safari browser"]
+    aliases: [safari browser]
     ambiguous_aliases: [safari]
     context: [apple, webkit, ios, browser, macos]
-  edge: { category: browser, aliases: ["microsoft edge"] }
+  edge:
+    category: browser
+    aliases: [microsoft edge]
   brave:
     category: browser
-    aliases: ["brave browser", "brave search"]
+    aliases: [brave browser, brave search]
     ambiguous_aliases: [brave]
     context: [browser, crypto, bat, privacy, eich]
   arc-browser:
-    {
-      category: browser,
-      aliases: ["arc browser", "the browser company", ladybird],
-    }
+    category: browser
+    aliases: [arc browser, the browser company, ladybird]
   browser-engines:
-    {
-      category: browser,
-      aliases:
-        [
-          webkit,
-          gecko,
-          "blink engine",
-          "browser engine",
-          "browser engines",
-          "web browser",
-          "web browsers",
-        ],
-    }
+    category: browser
+    aliases:
+      [
+        webkit,
+        gecko,
+        blink engine,
+        browser engine,
+        browser engines,
+        web browser,
+        web browsers,
+      ]
   servo:
     category: browser
     aliases: []
     ambiguous_aliases: [servo]
-    context: [browser, rust, mozilla, "web engine"]
+    context: [browser, rust, mozilla, web engine]
   browser-extensions:
-    {
-      category: browser,
-      aliases:
-        [
-          "manifest v3",
-          "manifest v2",
-          "browser extension",
-          "browser extensions",
-          ublock,
-          "ublock origin",
-          adblock,
-          "ad blocker",
-          "ad blockers",
-          adblocker,
-        ],
-    }
-  html: { category: web-platform, aliases: [html, html5] }
-  css: { category: web-platform, aliases: [css, css3, "css grid", flexbox] }
-  web-components:
-    {
-      category: web-platform,
-      aliases: ["web components", "custom elements", "shadow dom", lit],
-    }
+    category: browser
+    aliases:
+      [
+        manifest v3,
+        manifest v2,
+        browser extension,
+        browser extensions,
+        ublock,
+        ublock origin,
+        adblock,
+        ad blocker,
+        ad blockers,
+        adblocker,
+      ]
+  html:
+    category: web-platform
+    aliases: [html, html5]
+  css:
+    category: web-platform
+    aliases: [css, css3, css grid, flexbox]
   service-workers:
-    {
-      category: web-platform,
-      aliases:
-        [
-          "service worker",
-          "service workers",
-          pwa,
-          "progressive web app",
-          "progressive web apps",
-        ],
-    }
-  webgpu: { category: web-platform, aliases: [webgpu, webgl, "web gpu"] }
+    category: web-platform
+    aliases:
+      [
+        service worker,
+        service workers,
+        pwa,
+        progressive web app,
+        progressive web apps,
+      ]
+  webgpu:
+    category: web-platform
+    aliases: [webgpu, webgl, web gpu]
   web-standards:
-    {
-      category: web-platform,
-      aliases: [whatwg, w3c, ietf, "web standard", "web standards", tc39],
-    }
+    category: web-platform
+    aliases: [whatwg, w3c, ietf, web standard, web standards, tc39]
   web-security:
-    {
-      category: web-platform,
-      aliases:
-        [
-          cors,
-          "same-origin policy",
-          "content security policy",
-          "subresource integrity",
-        ],
-    }
+    category: web-platform
+    aliases:
+      [cors, same-origin policy, content security policy, subresource integrity]
   rendering:
-    {
-      category: web-platform,
-      aliases:
-        [
-          "single page app",
-          "single-page application",
-          "server-side rendering",
-          "server side rendering",
-          ssr,
-          "static site generator",
-          "static site generators",
-          jamstack,
-          "islands architecture",
-          "react server components",
-        ],
-    }
-  seo: { category: web-platform, aliases: [seo, "search engine optimization"] }
+    category: web-platform
+    aliases: [
+        single page app,
+        single-page application,
+        server-side rendering,
+        server side rendering,
+        ssr,
+        static site generator,
+        static site generators,
+        jamstack,
+        islands architecture,
+        react server
+        components,
+      ]
+  seo:
+    category: web-platform
+    aliases: [seo, search engine optimization]
   web-performance:
-    {
-      category: web-platform,
-      aliases:
-        ["core web vitals", "web performance", "page speed", "bundle size"],
-    }
+    category: web-platform
+    aliases: [core web vitals, web performance, page speed, bundle size]
   responsive-design:
-    {
-      category: design,
-      aliases:
-        [
-          "responsive design",
-          "responsive layout",
-          "responsive layouts",
-          "mobile-first",
-          "mobile first",
-          "adaptive layout",
-          "adaptive layouts",
-          "media queries",
-          "container queries",
-        ],
-    }
-
-  # ---------- Developer tooling and cloud ----------
+    category: design
+    aliases: [
+        responsive design,
+        responsive layout,
+        responsive layouts,
+        mobile-first,
+        mobile first,
+        adaptive
+        layout,
+        adaptive layouts,
+        media queries,
+        container queries,
+      ]
   npm:
-    {
-      category: tooling,
-      aliases: [npm, "npm package", "npm packages", node_modules, pnpm],
-    }
+    category: tooling
+    aliases: [npm, npm package, npm packages, node_modules, pnpm]
   yarn:
     category: tooling
-    aliases: ["yarn.lock"]
+    aliases: [yarn.lock]
     ambiguous_aliases: [yarn]
     context: [javascript, package, node, install, npm]
   pip:
     category: tooling
-    aliases: ["pip install", pypi]
+    aliases: [pip install, pypi]
     ambiguous_aliases: [pip]
     context: [python, install, package, wheel, virtualenv]
   uv:
     category: tooling
-    aliases: ["astral uv", "uv run", "uv sync"]
+    aliases: [astral uv, uv run, uv sync]
     ambiguous_aliases: [uv]
     context: [python, astral, pip, ruff]
   poetry:
@@ -2505,25 +2135,21 @@ technologies:
     context: [python, pyproject, dependency, dependencies]
   cargo:
     category: tooling
-    aliases: ["crates.io"]
+    aliases: [crates.io]
     ambiguous_aliases: [cargo]
-    context: [rust, crates, "cargo build", rustc]
+    context: [rust, crates, cargo build, rustc]
   maven:
-    {
-      category: tooling,
-      aliases: [maven, "maven central", gradle, "gradle build"],
-    }
+    category: tooling
+    aliases: [maven, maven central, gradle, gradle build]
   bazel:
-    {
-      category: tooling,
-      aliases: [bazel, buck2, cmake, meson, "build system", "build systems"],
-    }
+    category: tooling
+    aliases: [bazel, buck2, cmake, meson, build system, build systems]
   bundlers:
-    {
-      category: tooling,
-      aliases: [webpack, esbuild, turbopack, rspack, swc, turborepo, lerna],
-    }
-  eslint: { category: tooling, aliases: [eslint, biome, oxlint] }
+    category: tooling
+    aliases: [webpack, esbuild, turbopack, rspack, swc, turborepo, lerna]
+  eslint:
+    category: tooling
+    aliases: [eslint, biome, oxlint]
   prettier:
     category: tooling
     aliases: []
@@ -2533,1129 +2159,1379 @@ technologies:
     category: tooling
     aliases: []
     ambiguous_aliases: [ruff]
-    context: [python, linter, astral, "ruff format"]
+    context: [python, linter, astral, ruff format]
   type-checkers:
-    {
-      category: tooling,
-      aliases: [mypy, pyright, "type checker", "type checkers"],
-    }
-  pytest: { category: tooling, aliases: [pytest, jest, vitest, storybook] }
-  playwright:
     category: tooling
-    aliases: [puppeteer, selenium]
-    ambiguous_aliases: [playwright, cypress]
-    context: [test, testing, e2e, browser, "end-to-end", automation]
-  gitlab:
-    {
-      category: tooling,
-      aliases:
-        [gitlab, "gitlab ci", circleci, bitbucket, jira, confluence, trello],
-    }
+    aliases: [mypy, pyright, type checker, type checkers]
   jenkins:
     category: tooling
     aliases: [jenkinsfile]
     ambiguous_aliases: [jenkins]
     context: [ci, build, pipeline, plugin, groovy]
   gitops:
-    {
-      category: cloud-devops,
-      aliases:
-        [
-          gitops,
-          argocd,
-          "argo cd",
-          "argo workflows",
-          helm,
-          "helm chart",
-          "helm charts",
-        ],
-    }
-  ansible:
-    {
-      category: cloud-devops,
-      aliases: [ansible, saltstack, pulumi, cloudformation],
-    }
+    category: cloud-devops
+    aliases:
+      [gitops, argocd, argo cd, argo workflows, helm, helm chart, helm charts]
   service-mesh:
-    { category: cloud-devops, aliases: [istio, envoy, linkerd, "service mesh"] }
+    category: cloud-devops
+    aliases: [istio, envoy, linkerd, service mesh]
   observability:
-    {
-      category: cloud-devops,
-      aliases:
-        [
-          observability,
-          opentelemetry,
-          otel,
-          "distributed tracing",
-          jaeger,
-          "elk stack",
-          splunk,
-          "log aggregation",
-          "structured logging",
-        ],
-    }
-  prometheus:
-    {
-      category: cloud-devops,
-      aliases: [prometheus, grafana, "grafana labs", datadog, "new relic"],
-    }
+    category: cloud-devops
+    aliases: [
+        observability,
+        opentelemetry,
+        otel,
+        distributed tracing,
+        jaeger,
+        elk stack,
+        splunk,
+        log
+        aggregation,
+        structured logging,
+      ]
   sentry:
     category: cloud-devops
-    aliases: ["sentry.io", "error tracking"]
+    aliases: [sentry.io, error tracking]
     ambiguous_aliases: [sentry]
     context: [error, monitoring, crash, exceptions]
   paas:
-    {
-      category: cloud-devops,
-      aliases:
-        [
-          heroku,
-          netlify,
-          "fly.io",
-          "railway.app",
-          "render.com",
-          "platform as a service",
-          paas,
-          coolify,
-          dokku,
-        ],
-    }
+    category: cloud-devops
+    aliases:
+      [
+        heroku,
+        netlify,
+        fly.io,
+        railway.app,
+        render.com,
+        platform as a service,
+        paas,
+        coolify,
+        dokku,
+      ]
   cloud-hosts:
-    {
-      category: cloud-devops,
-      aliases: [digitalocean, hetzner, linode, vultr, ovh, ovhcloud, scaleway],
-    }
+    category: cloud-devops
+    aliases: [digitalocean, hetzner, linode, vultr, ovh, ovhcloud, scaleway]
   cloud-computing:
-    {
-      category: cloud-devops,
-      aliases:
-        [
-          "multi-cloud",
-          multicloud,
-          "hybrid cloud",
-          "cloud migration",
-          "cloud computing",
-          "cloud provider",
-          "cloud providers",
-        ],
-    }
+    category: cloud-devops
+    aliases:
+      [
+        multi-cloud,
+        multicloud,
+        hybrid cloud,
+        cloud migration,
+        cloud computing,
+        cloud provider,
+        cloud providers,
+      ]
   cloud-costs:
-    {
-      category: cloud-devops,
-      aliases:
-        [
-          "cloud costs",
-          "cloud bill",
-          "cloud repatriation",
-          "egress fees",
-          "egress costs",
-          finops,
-        ],
-    }
+    category: cloud-devops
+    aliases:
+      [
+        cloud costs,
+        cloud bill,
+        cloud repatriation,
+        egress fees,
+        egress costs,
+        finops,
+      ]
   self-hosting:
-    {
-      category: cloud-devops,
-      aliases:
-        [
-          self-hosted,
-          selfhosted,
-          self-hosting,
-          homelab,
-          "home lab",
-          "home server",
-          synology,
-          truenas,
-          unraid,
-        ],
-    }
+    category: cloud-devops
+    aliases:
+      [
+        self-hosted,
+        selfhosted,
+        self-hosting,
+        homelab,
+        home lab,
+        home server,
+        synology,
+        truenas,
+        unraid,
+      ]
   data-centers:
-    {
-      category: cloud-devops,
-      aliases:
-        [
-          "data center",
-          "data centers",
-          datacenter,
-          datacenters,
-          hyperscaler,
-          hyperscalers,
-          colocation,
-        ],
-    }
+    category: cloud-devops
+    aliases:
+      [
+        data center,
+        data centers,
+        datacenter,
+        datacenters,
+        hyperscaler,
+        hyperscalers,
+        colocation,
+      ]
   serverless:
-    {
-      category: cloud-devops,
-      aliases:
-        [
-          serverless,
-          faas,
-          "aws lambda",
-          "cloud functions",
-          "edge functions",
-          "cloudflare workers",
-          "edge computing",
-        ],
-    }
+    category: cloud-devops
+    aliases: [
+        serverless,
+        faas,
+        aws lambda,
+        cloud functions,
+        edge functions,
+        cloudflare workers,
+        edge
+        computing,
+      ]
   vim:
-    {
-      category: tooling,
-      aliases: [vim, emacs, "org mode", "org-mode", "doom emacs", spacemacs],
-    }
-  jetbrains-ides:
-    {
-      category: tooling,
-      aliases:
-        [
-          intellij,
-          pycharm,
-          webstorm,
-          clion,
-          rider,
-          goland,
-          rubymine,
-          "jetbrains fleet",
-        ],
-    }
+    category: tooling
+    aliases: [vim, emacs, org mode, org-mode, doom emacs, spacemacs]
   zed:
     category: tooling
-    aliases: ["zed editor", "zed industries"]
+    aliases: [zed editor, zed industries]
     ambiguous_aliases: [zed]
     context: [editor, rust, ide, collaboration]
   helix:
     category: tooling
-    aliases: ["helix editor"]
+    aliases: [helix editor]
     ambiguous_aliases: [helix]
     context: [editor, modal, rust, vim]
   xcode:
-    {
-      category: tooling,
-      aliases: [xcode, "xcode cloud", "interface builder", "sublime text"],
-    }
+    category: tooling
+    aliases: [xcode, xcode cloud, interface builder, sublime text]
   replit:
-    {
-      category: tooling,
-      aliases:
-        [
-          replit,
-          codespaces,
-          "dev containers",
-          devcontainer,
-          devcontainers,
-          gitpod,
-        ],
-    }
+    category: tooling
+    aliases:
+      [replit, codespaces, dev containers, devcontainer, devcontainers, gitpod]
   ide:
-    {
-      category: tooling,
-      aliases: [ide, ides, "integrated development environment"],
-    }
+    category: tooling
+    aliases: [ide, ides, integrated development environment]
   terminal-emulators:
-    {
-      category: tooling,
-      aliases:
-        [
-          alacritty,
-          wezterm,
-          ghostty,
-          iterm2,
-          "windows terminal",
-          "terminal emulator",
-          "terminal emulators",
-        ],
-    }
-  tmux: { category: tooling, aliases: [tmux, zellij] }
+    category: tooling
+    aliases:
+      [
+        alacritty,
+        wezterm,
+        ghostty,
+        iterm2,
+        windows terminal,
+        terminal emulator,
+        terminal emulators,
+      ]
+  tmux:
+    category: tooling
+    aliases: [tmux, zellij]
   shell:
-    {
-      category: tooling,
-      aliases:
-        [
-          bash,
-          zsh,
-          powershell,
-          "fish shell",
-          nushell,
-          "shell script",
-          "shell scripts",
-          "shell scripting",
-          posix,
-          "command line",
-          "command-line",
-          cli,
-          clis,
-        ],
-    }
-  homebrew: { category: tooling, aliases: [homebrew, dotfiles, dotfile] }
+    category: tooling
+    aliases:
+      [
+        bash,
+        zsh,
+        powershell,
+        fish shell,
+        nushell,
+        shell script,
+        shell scripts,
+        shell scripting,
+        posix,
+        command line,
+        command-line,
+        cli,
+        clis,
+      ]
+  homebrew:
+    category: tooling
+    aliases: [homebrew, dotfiles, dotfile]
   ffmpeg:
-    {
-      category: tooling,
-      aliases:
-        [
-          ffmpeg,
-          av1,
-          h264,
-          "h.264",
-          h265,
-          hevc,
-          vp9,
-          "video codec",
-          "video codecs",
-          hls,
-        ],
-    }
+    category: tooling
+    aliases:
+      [
+        ffmpeg,
+        av1,
+        h264,
+        h.264,
+        h265,
+        hevc,
+        vp9,
+        video codec,
+        video codecs,
+        hls,
+      ]
   audio-tech:
-    {
-      category: tooling,
-      aliases:
-        [
-          "lossless audio",
-          "spatial audio",
-          "audio codec",
-          "audio codecs",
-          midi,
-          "digital audio workstation",
-          "dolby atmos",
-        ],
-    }
+    category: tooling
+    aliases:
+      [
+        lossless audio,
+        spatial audio,
+        audio codec,
+        audio codecs,
+        midi,
+        digital audio workstation,
+        dolby atmos,
+      ]
   image-formats:
-    { category: tooling, aliases: [avif, webp, "jpeg xl", jxl, heic, svg] }
+    category: tooling
+    aliases: [avif, webp, jpeg xl, jxl, heic, svg]
   document-formats:
-    {
-      category: tooling,
-      aliases:
-        [
-          pdf,
-          pdfs,
-          "pdf.js",
-          docx,
-          epub,
-          "open document format",
-          ooxml,
-          libreoffice,
-          "google docs",
-          "google sheets",
-        ],
-    }
+    category: tooling
+    aliases: [
+        pdf,
+        pdfs,
+        pdf.js,
+        docx,
+        epub,
+        open document format,
+        ooxml,
+        libreoffice,
+        google docs,
+        google
+        sheets,
+      ]
   compilers:
-    {
-      category: engineering,
-      aliases:
-        [
-          compiler,
-          compilers,
-          llvm,
-          gcc,
-          clang,
-          mlir,
-          jit,
-          "just-in-time",
-          "ahead-of-time",
-          bytecode,
-          "tree-sitter",
-          "language server",
-        ],
-    }
+    category: engineering
+    aliases:
+      [
+        compiler,
+        compilers,
+        llvm,
+        gcc,
+        clang,
+        mlir,
+        jit,
+        just-in-time,
+        ahead-of-time,
+        bytecode,
+        tree-sitter,
+        language server,
+      ]
   json:
-    {
-      category: engineering,
-      aliases: [json, jsonl, ndjson, "json schema", json5],
-    }
-  config-formats: { category: engineering, aliases: [yaml, toml] }
+    category: engineering
+    aliases: [json, jsonl, ndjson, json schema, json5]
+  config-formats:
+    category: engineering
+    aliases: [yaml, toml]
   protobuf:
-    {
-      category: engineering,
-      aliases:
-        [
-          protobuf,
-          "protocol buffers",
-          flatbuffers,
-          msgpack,
-          cbor,
-          "apache avro",
-        ],
-    }
+    category: engineering
+    aliases:
+      [protobuf, protocol buffers, flatbuffers, msgpack, cbor, apache avro]
   regex:
-    {
-      category: engineering,
-      aliases: [regex, regexp, "regular expression", "regular expressions"],
-    }
+    category: engineering
+    aliases: [regex, regexp, regular expression, regular expressions]
   unicode:
-    {
-      category: engineering,
-      aliases:
-        [unicode, utf-8, utf8, utf-16, "character encoding", "text encoding"],
-    }
+    category: engineering
+    aliases: [unicode, utf-8, utf8, utf-16, character encoding, text encoding]
   markdown:
-    {
-      category: engineering,
-      aliases:
-        [markdown, mdx, asciidoc, restructuredtext, latex, typst, pandoc],
-    }
+    category: engineering
+    aliases: [markdown, mdx, asciidoc, restructuredtext, latex, typst, pandoc]
   time-zones:
-    {
-      category: engineering,
-      aliases:
-        [
-          "time zones",
-          "time zone",
-          timezone,
-          timezones,
-          "leap second",
-          "leap seconds",
-          "unix time",
-          "iso 8601",
-        ],
-    }
-
-  # ---------- Engineering practices and concepts ----------
+    category: engineering
+    aliases:
+      [
+        time zones,
+        time zone,
+        timezone,
+        timezones,
+        leap second,
+        leap seconds,
+        unix time,
+        iso 8601,
+      ]
   microservices:
-    {
-      category: engineering,
-      aliases:
-        [
-          microservices,
-          microservice,
-          "service-oriented architecture",
-          "event-driven architecture",
-          "event sourcing",
-          cqrs,
-          "domain-driven design",
-          "modular monolith",
-        ],
-    }
-  monorepo: { category: engineering, aliases: [monorepo, monorepos] }
+    category: engineering
+    aliases: [
+        microservices,
+        microservice,
+        service-oriented architecture,
+        event-driven architecture,
+        event
+        sourcing,
+        cqrs,
+        domain-driven design,
+        modular monolith,
+      ]
+  monorepo:
+    category: engineering
+    aliases: [monorepo, monorepos]
   devops:
-    {
-      category: engineering,
-      aliases:
-        [
-          devops,
-          devsecops,
-          "platform engineering",
-          sre,
-          "site reliability",
-          "internal developer platform",
-        ],
-    }
+    category: engineering
+    aliases:
+      [
+        devops,
+        devsecops,
+        platform engineering,
+        sre,
+        site reliability,
+        internal developer platform,
+      ]
   ci-cd:
-    {
-      category: engineering,
-      aliases:
-        [
-          "ci/cd",
-          cicd,
-          "continuous integration",
-          "continuous deployment",
-          "continuous delivery",
-        ],
-    }
+    category: engineering
+    aliases:
+      [
+        ci/cd,
+        cicd,
+        continuous integration,
+        continuous deployment,
+        continuous delivery,
+      ]
   feature-flags:
-    {
-      category: engineering,
-      aliases:
-        [
-          "feature flag",
-          "feature flags",
-          "feature toggles",
-          launchdarkly,
-          "a/b testing",
-          "ab testing",
-          "canary release",
-          "canary deployments",
-          "blue-green deployment",
-        ],
-    }
+    category: engineering
+    aliases: [
+        feature flag,
+        feature flags,
+        feature toggles,
+        launchdarkly,
+        a/b testing,
+        ab testing,
+        canary
+        release,
+        canary deployments,
+        blue-green deployment,
+      ]
   testing-practices:
-    {
-      category: engineering,
-      aliases:
-        [
-          tdd,
-          "test-driven development",
-          "unit test",
-          "unit tests",
-          "integration tests",
-          "integration testing",
-          "property-based testing",
-          fuzzing,
-          "mutation testing",
-          "end-to-end testing",
-          "e2e testing",
-          "e2e tests",
-        ],
-    }
+    category: engineering
+    aliases:
+      [
+        tdd,
+        test-driven development,
+        unit test,
+        unit tests,
+        integration tests,
+        integration testing,
+        property-based testing,
+        fuzzing,
+        mutation testing,
+        end-to-end testing,
+        e2e testing,
+        e2e tests,
+      ]
   technical-debt:
-    {
-      category: engineering,
-      aliases:
-        [
-          "technical debt",
-          "tech debt",
-          refactoring,
-          "legacy code",
-          "code quality",
-          "clean code",
-          "code smell",
-          "spaghetti code",
-        ],
-    }
+    category: engineering
+    aliases:
+      [
+        technical debt,
+        tech debt,
+        refactoring,
+        legacy code,
+        code quality,
+        clean code,
+        code smell,
+        spaghetti code,
+      ]
   code-review:
-    {
-      category: engineering,
-      aliases:
-        [
-          "code review",
-          "code reviews",
-          "pull request",
-          "pull requests",
-          "merge request",
-        ],
-    }
+    category: engineering
+    aliases:
+      [code review, code reviews, pull request, pull requests, merge request]
   agile:
-    {
-      category: engineering,
-      aliases: [agile, scrum, kanban, "sprint planning", "story points"],
-    }
+    category: engineering
+    aliases: [agile, scrum, kanban, sprint planning, story points]
   type-systems:
-    {
-      category: engineering,
-      aliases:
-        [
-          "type system",
-          "type systems",
-          "static typing",
-          "dynamic typing",
-          "gradual typing",
-          "type inference",
-          "dependent types",
-          "algebraic data types",
-          "null safety",
-          "sound null safety",
-        ],
-    }
+    category: engineering
+    aliases:
+      [
+        type system,
+        type systems,
+        static typing,
+        dynamic typing,
+        gradual typing,
+        type inference,
+        dependent types,
+        algebraic data types,
+        null safety,
+        sound null safety,
+      ]
   async-concurrency:
-    {
-      category: engineering,
-      aliases:
-        [
-          concurrency,
-          parallelism,
-          "async await",
-          "async/await",
-          coroutines,
-          "green threads",
-          "actor model",
-          "structured concurrency",
-          "data race",
-          "data races",
-        ],
-    }
+    category: engineering
+    aliases:
+      [
+        concurrency,
+        parallelism,
+        async await,
+        async/await,
+        coroutines,
+        green threads,
+        actor model,
+        structured concurrency,
+        data race,
+        data races,
+      ]
   memory-management:
-    {
-      category: engineering,
-      aliases:
-        [
-          "garbage collection",
-          "garbage collector",
-          "borrow checker",
-          "manual memory management",
-          "memory leak",
-          "memory leaks",
-        ],
-    }
+    category: engineering
+    aliases: [
+        garbage collection,
+        garbage collector,
+        borrow checker,
+        manual memory management,
+        memory
+        leak,
+        memory leaks,
+      ]
   api-design:
-    {
-      category: engineering,
-      aliases:
-        [
-          "rest api",
-          "rest apis",
-          restful,
-          openapi,
-          swagger,
-          "api design",
-          "api gateway",
-          json-rpc,
-          jsonrpc,
-          webhook,
-          webhooks,
-          "api versioning",
-        ],
-    }
-  orm: { category: engineering, aliases: [orm, orms, "object-relational"] }
-  saas: { category: industry, aliases: [saas, "software as a service"] }
-
-  # ---------- Design and accessibility ----------
-  figma: { category: design, aliases: [figma, penpot, "figma plugin"] }
+    category: engineering
+    aliases:
+      [
+        rest api,
+        rest apis,
+        restful,
+        openapi,
+        swagger,
+        api design,
+        api gateway,
+        json-rpc,
+        jsonrpc,
+        webhook,
+        webhooks,
+        api versioning,
+      ]
+  orm:
+    category: engineering
+    aliases: [orm, orms, object-relational]
+  saas:
+    category: industry
+    aliases: [saas, software as a service]
+  figma:
+    category: design
+    aliases: [figma, penpot, figma plugin]
   design-systems:
-    {
-      category: design,
-      aliases:
-        [
-          "design system",
-          "design systems",
-          "design tokens",
-          "component library",
-          "component libraries",
-          "atomic design",
-        ],
-    }
+    category: design
+    aliases: [
+        design system,
+        design systems,
+        design tokens,
+        component library,
+        component libraries,
+        atomic
+        design,
+      ]
   material-design:
-    {
-      category: design,
-      aliases:
-        [
-          "material design",
-          "material you",
-          "material 3",
-          "material design 3",
-          "material ui",
-        ],
-    }
+    category: design
+    aliases:
+      [
+        material design,
+        material you,
+        material 3,
+        material design 3,
+        material ui,
+      ]
   apple-hig:
-    {
-      category: design,
-      aliases:
-        [
-          "human interface guidelines",
-          "apple hig",
-          "liquid glass",
-          "dynamic island",
-          "sf symbols",
-        ],
-    }
+    category: design
+    aliases:
+      [
+        human interface guidelines,
+        apple hig,
+        liquid glass,
+        dynamic island,
+        sf symbols,
+      ]
   ui-ux:
-    {
-      category: design,
-      aliases:
-        [
-          ux,
-          "ux design",
-          "ui design",
-          "ui/ux",
-          "user experience",
-          "user interface",
-          "user interfaces",
-          "dark pattern",
-          "dark patterns",
-          usability,
-          "information architecture",
-          "design thinking",
-        ],
-    }
+    category: design
+    aliases: [
+        ux,
+        ux design,
+        ui design,
+        ui/ux,
+        user experience,
+        user interface,
+        user interfaces,
+        dark
+        pattern,
+        dark patterns,
+        usability,
+        information architecture,
+        design thinking,
+      ]
   accessibility:
-    {
-      category: design,
-      aliases:
-        [
-          a11y,
-          accessibility,
-          wcag,
-          "screen reader",
-          "screen readers",
-          voiceover,
-          talkback,
-          "color contrast",
-          "assistive technology",
-          "assistive technologies",
-        ],
-    }
-  dark-mode: { category: design, aliases: ["dark mode", "dark theme"] }
+    category: design
+    aliases:
+      [
+        a11y,
+        accessibility,
+        wcag,
+        screen reader,
+        screen readers,
+        voiceover,
+        talkback,
+        color contrast,
+        assistive technology,
+        assistive technologies,
+      ]
+  dark-mode:
+    category: design
+    aliases: [dark mode, dark theme]
   animation:
-    {
-      category: design,
-      aliases:
-        [
-          lottie,
-          "rive animation",
-          "rive animations",
-          "motion design",
-          micro-interactions,
-          microinteractions,
-          "spring animation",
-          "spring animations",
-          60fps,
-        ],
-    }
+    category: design
+    aliases:
+      [
+        lottie,
+        rive animation,
+        rive animations,
+        motion design,
+        micro-interactions,
+        microinteractions,
+        spring animation,
+        spring animations,
+        60fps,
+      ]
   typography:
-    {
-      category: design,
-      aliases:
-        [
-          "variable fonts",
-          "variable font",
-          "web fonts",
-          "web font",
-          "font rendering",
-          typography,
-          typeface,
-          typefaces,
-          opentype,
-          woff2,
-        ],
-    }
+    category: design
+    aliases:
+      [
+        variable fonts,
+        variable font,
+        web fonts,
+        web font,
+        font rendering,
+        typography,
+        typeface,
+        typefaces,
+        opentype,
+        woff2,
+      ]
   icons:
-    {
-      category: design,
-      aliases:
-        [
-          "icon set",
-          "icon sets",
-          lucide,
-          heroicons,
-          "phosphor icons",
-          "material icons",
-          "font awesome",
-          fontawesome,
-          "svg icons",
-        ],
-    }
-
-  # ---------- Platforms and services ----------
+    category: design
+    aliases:
+      [
+        icon set,
+        icon sets,
+        lucide,
+        heroicons,
+        phosphor icons,
+        material icons,
+        font awesome,
+        fontawesome,
+        svg icons,
+      ]
   stackoverflow:
-    {
-      category: platform,
-      aliases: [stackoverflow, "stack overflow", "stack exchange"],
-    }
-  reddit: { category: platform, aliases: [reddit, subreddit, subreddits] }
-  wikipedia: { category: platform, aliases: [wikipedia, wikidata] }
-  youtube: { category: platform, aliases: [youtube, "youtube shorts"] }
+    category: platform
+    aliases: [stackoverflow, stack overflow, stack exchange]
+  reddit:
+    category: platform
+    aliases: [reddit, subreddit, subreddits]
+  youtube:
+    category: platform
+    aliases: [youtube, youtube shorts]
   twitter-x:
-    { category: platform, aliases: [twitter, "x.com", "x corp", tweet, tweets] }
+    category: platform
+    aliases: [twitter, x.com, x corp, tweet, tweets]
   social-apps:
-    {
-      category: platform,
-      aliases:
-        [tiktok, instagram, linkedin, discord, telegram, whatsapp, substack],
-    }
-  slack:
     category: platform
-    aliases: ["slack app"]
-    ambiguous_aliases: [slack]
-    context: [workspace, channel, messaging, salesforce, "slack api", chat]
-  zoom:
-    category: platform
-    aliases: ["zoom call", "zoom meeting", "zoom video"]
-    ambiguous_aliases: [zoom]
-    context: [meeting, video, call, conference, "zoom meeting"]
-  notion:
-    category: platform
-    aliases: ["notion.so", "notion ai"]
-    ambiguous_aliases: [notion]
-    context: [notes, workspace, database, docs, wiki]
+    aliases:
+      [tiktok, instagram, linkedin, discord, telegram, whatsapp, substack]
   obsidian:
     category: platform
-    aliases: ["obsidian.md"]
+    aliases: [obsidian.md]
     ambiguous_aliases: [obsidian]
-    context: [notes, markdown, "second brain", vault, plugin]
+    context: [notes, markdown, second brain, vault, plugin]
   signal:
     category: platform
-    aliases: ["signal messenger", "signal foundation"]
+    aliases: [signal messenger, signal foundation]
     ambiguous_aliases: [signal]
-    context: [messenger, "end-to-end", encrypted, whittaker, "signal app"]
+    context: [messenger, end-to-end, encrypted, whittaker, signal app]
   maps:
-    {
-      category: platform,
-      aliases: ["google maps", openstreetmap, mapbox, maplibre],
-    }
+    category: platform
+    aliases: [google maps, openstreetmap, mapbox, maplibre]
   internet-archive:
-    {
-      category: platform,
-      aliases:
-        ["internet archive", "wayback machine", "archive.org", "archive.today"],
-    }
-
-  # ---------- Gaming ----------
+    category: platform
+    aliases: [internet archive, wayback machine, archive.org, archive.today]
   steam:
     category: gaming
     aliases:
-      [
-        "steam deck",
-        steamos,
-        "steam os",
-        "steam store",
-        "steam sale",
-        "steam workshop",
-      ]
+      [steam deck, steamos, steam os, steam store, steam sale, steam workshop]
     ambiguous_aliases: [steam]
     context: [valve, games, gaming, gabe]
   game-engines:
-    {
-      category: gaming,
-      aliases:
-        [
-          unreal,
-          "unreal engine",
-          godot,
-          unity3d,
-          "game engine",
-          "game engines",
-          "game development",
-          gamedev,
-          "game dev",
-          "indie game",
-          "indie games",
-        ],
-    }
+    category: gaming
+    aliases:
+      [
+        unreal,
+        unreal engine,
+        godot,
+        unity3d,
+        game engine,
+        game engines,
+        game development,
+        gamedev,
+        game dev,
+        indie game,
+        indie games,
+      ]
   unity:
     category: gaming
-    aliases: ["unity engine"]
+    aliases: [unity engine]
     ambiguous_aliases: [unity]
-    context: [game, engine, "c#", "unity technologies", "unity 6"]
+    context: [game, engine, c#, unity technologies, unity 6]
   bevy:
     category: gaming
-    aliases: ["bevy engine"]
+    aliases: [bevy engine]
     ambiguous_aliases: [bevy]
     context: [rust, game, ecs, engine]
   gaming-platforms:
-    {
-      category: gaming,
-      aliases:
-        [
-          playstation,
-          ps5,
-          "ps5 pro",
-          xbox,
-          nintendo,
-          "nintendo switch",
-          "switch 2",
-          "game pass",
-          "epic games",
-          "cloud gaming",
-        ],
-    }
+    category: gaming
+    aliases:
+      [
+        playstation,
+        ps5,
+        ps5 pro,
+        xbox,
+        nintendo,
+        nintendo switch,
+        switch 2,
+        game pass,
+        epic games,
+        cloud gaming,
+      ]
   emulation:
-    {
-      category: gaming,
-      aliases: [emulator, emulators, emulation, "retro gaming"],
-    }
+    category: gaming
+    aliases: [emulator, emulators, emulation, retro gaming]
   video-games:
-    {
-      category: gaming,
-      aliases:
-        [
-          "video game",
-          "video games",
-          "game industry",
-          "video game industry",
-          "game studio",
-          "game studios",
-          minecraft,
-          roblox,
-          fortnite,
-        ],
-    }
-
-  # ---------- Robotics, space, energy, science ----------
+    category: gaming
+    aliases:
+      [
+        video game,
+        video games,
+        game industry,
+        video game industry,
+        game studio,
+        game studios,
+        minecraft,
+        roblox,
+        fortnite,
+      ]
   robotics:
-    {
-      category: science-energy,
-      aliases:
-        [
-          robotics,
-          "humanoid robot",
-          "humanoid robots",
-          "robot arm",
-          "robot arms",
-          "boston dynamics",
-          unitree,
-          "figure ai",
-          "robot vacuum",
-          "robot vacuums",
-          "ros 2",
-          ros2,
-          lidar,
-        ],
-    }
+    category: science-energy
+    aliases:
+      [
+        robotics,
+        humanoid robot,
+        humanoid robots,
+        robot arm,
+        robot arms,
+        boston dynamics,
+        unitree,
+        figure ai,
+        robot vacuum,
+        robot vacuums,
+        ros 2,
+        ros2,
+        lidar,
+      ]
   drones:
-    {
-      category: science-energy,
-      aliases:
-        [
-          drone,
-          drones,
-          uav,
-          uavs,
-          quadcopter,
-          quadcopters,
-          "fpv drone",
-          "fpv drones",
-        ],
-    }
+    category: science-energy
+    aliases:
+      [drone, drones, uav, uavs, quadcopter, quadcopters, fpv drone, fpv drones]
   space:
-    {
-      category: science-energy,
-      aliases:
-        [
-          nasa,
-          "blue origin",
-          "rocket lab",
-          "rocket launch",
-          "space station",
-          satellite,
-          satellites,
-          "james webb",
-          jwst,
-          "lunar lander",
-          "project kuiper",
-        ],
-    }
+    category: science-energy
+    aliases: [
+        nasa,
+        blue origin,
+        rocket lab,
+        rocket launch,
+        space station,
+        satellite,
+        satellites,
+        james
+        webb,
+        jwst,
+        lunar lander,
+        project kuiper,
+      ]
   starship:
     category: science-energy
     aliases: []
     ambiguous_aliases: [starship]
-    context: [spacex, rocket, "super heavy", launch, booster]
+    context: [spacex, rocket, super heavy, launch, booster]
   ev:
     category: science-energy
     aliases:
       [
-        "electric vehicle",
-        "electric vehicles",
-        "ev charging",
-        "electric car",
-        "electric cars",
+        electric vehicle,
+        electric vehicles,
+        ev charging,
+        electric car,
+        electric cars,
         byd,
       ]
     ambiguous_aliases: [ev, evs]
     context: [electric, battery, charging, tesla, range]
   battery:
-    {
-      category: science-energy,
-      aliases:
-        [
-          battery,
-          batteries,
-          "lithium-ion",
-          "lithium ion",
-          "solid-state battery",
-          "solid state battery",
-          "sodium-ion",
-          li-ion,
-          "energy storage",
-        ],
-    }
+    category: science-energy
+    aliases:
+      [
+        battery,
+        batteries,
+        lithium-ion,
+        lithium ion,
+        solid-state battery,
+        solid state battery,
+        sodium-ion,
+        li-ion,
+        energy storage,
+      ]
   solar:
-    {
-      category: science-energy,
-      aliases:
-        [
-          "solar panel",
-          "solar panels",
-          "solar power",
-          photovoltaic,
-          "solar energy",
-          "wind turbine",
-          "wind turbines",
-          geothermal,
-          "heat pump",
-          "heat pumps",
-        ],
-    }
+    category: science-energy
+    aliases:
+      [
+        solar panel,
+        solar panels,
+        solar power,
+        photovoltaic,
+        solar energy,
+        wind turbine,
+        wind turbines,
+        geothermal,
+        heat pump,
+        heat pumps,
+      ]
   nuclear:
-    {
-      category: science-energy,
-      aliases:
-        [
-          "nuclear power",
-          "nuclear reactor",
-          "nuclear fusion",
-          "fusion energy",
-          "small modular reactor",
-          "nuclear fission",
-          tokamak,
-        ],
-    }
+    category: science-energy
+    aliases: [
+        nuclear power,
+        nuclear reactor,
+        nuclear fusion,
+        fusion energy,
+        small modular reactor,
+        nuclear
+        fission,
+        tokamak,
+      ]
   power-grid:
-    {
-      category: science-energy,
-      aliases:
-        [
-          "power grid",
-          "smart grid",
-          "grid storage",
-          "carbon capture",
-          "carbon removal",
-          "green hydrogen",
-          "climate tech",
-        ],
-    }
+    category: science-energy
+    aliases: [
+        power grid,
+        smart grid,
+        grid storage,
+        carbon capture,
+        carbon removal,
+        green hydrogen,
+        climate
+        tech,
+      ]
   biotech:
-    {
-      category: science-energy,
-      aliases:
-        [
-          biotech,
-          biotechnology,
-          crispr,
-          "gene editing",
-          "gene therapy",
-          mrna,
-          genomics,
-          "dna sequencing",
-          "protein folding",
-          alphafold,
-          "synthetic biology",
-          bioinformatics,
-          "cultured meat",
-          "lab-grown meat",
-        ],
-    }
+    category: science-energy
+    aliases:
+      [
+        biotech,
+        biotechnology,
+        crispr,
+        gene editing,
+        gene therapy,
+        mrna,
+        genomics,
+        dna sequencing,
+        protein folding,
+        alphafold,
+        synthetic biology,
+        bioinformatics,
+        cultured meat,
+        lab-grown meat,
+      ]
   health-tech:
-    {
-      category: science-energy,
-      aliases:
-        [
-          telehealth,
-          telemedicine,
-          "digital health",
-          "electronic health record",
-          "electronic health records",
-          "medical imaging",
-          "medical ai",
-        ],
-    }
+    category: science-energy
+    aliases:
+      [
+        telehealth,
+        telemedicine,
+        digital health,
+        electronic health record,
+        electronic health records,
+        medical imaging,
+        medical ai,
+      ]
   bci:
-    {
-      category: science-energy,
-      aliases:
-        [
-          neuralink,
-          "brain-computer interface",
-          "brain computer interface",
-          "brain-computer interfaces",
-        ],
-    }
-
-  # ---------- Industry, business and policy ----------
+    category: science-energy
+    aliases:
+      [
+        neuralink,
+        brain-computer interface,
+        brain computer interface,
+        brain-computer interfaces,
+      ]
   startups:
-    {
-      category: industry,
-      aliases:
-        [
-          startup,
-          startups,
-          "seed round",
-          "series a",
-          "series b",
-          "venture capital",
-          bootstrapped,
-          bootstrapping,
-          ipo,
-          ipos,
-        ],
-    }
+    category: industry
+    aliases:
+      [
+        startup,
+        startups,
+        seed round,
+        series a,
+        series b,
+        venture capital,
+        bootstrapped,
+        bootstrapping,
+        ipo,
+        ipos,
+      ]
   tech-labor:
-    {
-      category: industry,
-      aliases:
-        [
-          h-1b,
-          h1b,
-          layoffs,
-          "tech layoffs",
-          "tech workers",
-          "hiring freeze",
-          leetcode,
-          "technical interview",
-          "technical interviews",
-          "coding interview",
-          "coding interviews",
-        ],
-    }
+    category: industry
+    aliases:
+      [
+        h-1b,
+        h1b,
+        layoffs,
+        tech layoffs,
+        tech workers,
+        hiring freeze,
+        leetcode,
+        technical interview,
+        technical interviews,
+        coding interview,
+        coding interviews,
+      ]
   remote-work:
-    {
-      category: industry,
-      aliases:
-        [
-          "remote work",
-          "work from home",
-          wfh,
-          "return to office",
-          "hybrid work",
-          "remote-first",
-        ],
-    }
+    category: industry
+    aliases:
+      [
+        remote work,
+        work from home,
+        wfh,
+        return to office,
+        hybrid work,
+        remote-first,
+      ]
   open-source:
-    {
-      category: industry,
-      aliases:
-        [
-          "open source",
-          open-source,
-          foss,
-          "free software",
-          "open source license",
-          "open-source license",
-        ],
-    }
+    category: industry
+    aliases:
+      [
+        open source,
+        open-source,
+        foss,
+        free software,
+        open source license,
+        open-source license,
+      ]
   licenses:
-    {
-      category: policy,
-      aliases:
-        [
-          gpl,
-          agpl,
-          lgpl,
-          "gnu gpl",
-          "apache 2.0",
-          "apache license",
-          "mit license",
-          "creative commons",
-          copyleft,
-          sspl,
-          "bsd license",
-          "source-available",
-          "source available",
-          "business source license",
-          "fair source",
-        ],
-    }
+    category: policy
+    aliases:
+      [
+        gpl,
+        agpl,
+        lgpl,
+        gnu gpl,
+        apache 2.0,
+        apache license,
+        mit license,
+        creative commons,
+        copyleft,
+        sspl,
+        bsd license,
+        source-available,
+        source available,
+        business source license,
+        fair source,
+      ]
   antitrust:
-    {
-      category: policy,
-      aliases:
-        [antitrust, anti-trust, "digital markets act", "competition law"],
-    }
+    category: policy
+    aliases: [antitrust, anti-trust, digital markets act, competition law]
   net-neutrality:
-    { category: policy, aliases: ["net neutrality", "section 230"] }
+    category: policy
+    aliases: [net neutrality, section 230]
   right-to-repair:
-    { category: policy, aliases: ["right to repair", "right-to-repair"] }
+    category: policy
+    aliases: [right to repair, right-to-repair]
   export-controls:
-    {
-      category: policy,
-      aliases:
-        [
-          "export controls",
-          "export control",
-          "chip ban",
-          "chip export",
-          "entity list",
-          "chip war",
-        ],
-    }
+    category: policy
+    aliases:
+      [
+        export controls,
+        export control,
+        chip ban,
+        chip export,
+        entity list,
+        chip war,
+      ]
   digital-sovereignty:
-    {
-      category: policy,
-      aliases:
-        [
-          "digital sovereignty",
-          "data sovereignty",
-          "sovereign cloud",
-          "sovereign ai",
-        ],
-    }
+    category: policy
+    aliases:
+      [digital sovereignty, data sovereignty, sovereign cloud, sovereign ai]
   censorship:
-    {
-      category: policy,
-      aliases:
-        [
-          censorship,
-          "great firewall",
-          "internet shutdown",
-          "internet shutdowns",
-          "content moderation",
-        ],
-    }
+    category: policy
+    aliases:
+      [
+        censorship,
+        great firewall,
+        internet shutdown,
+        internet shutdowns,
+        content moderation,
+      ]
   online-safety:
-    {
-      category: policy,
-      aliases: ["age verification", "online safety act", "chat control"],
-    }
+    category: policy
+    aliases: [age verification, online safety act, chat control]
+  riverpod:
+    category: state-mgmt
+    aliases:
+      [
+        riverpod,
+        flutter_riverpod,
+        hooks_riverpod,
+        riverpod_generator,
+        riverpod_annotation,
+      ]
+  bloc:
+    category: state-mgmt
+    aliases: [flutter_bloc, bloc pattern, bloc_test]
+    ambiguous_aliases: [bloc]
+    context: [flutter, dart, cubit]
+  provider:
+    category: state-mgmt
+    aliases: [changenotifierprovider, multiprovider, "package:provider"]
+    ambiguous_aliases: [provider]
+    context: [flutter, riverpod, changenotifier, dart]
+  freezed:
+    category: mobile
+    aliases: []
+    ambiguous_aliases: [freezed]
+    context: [flutter, dart, build_runner, pubspec, json_serializable]
+  isar:
+    category: database
+    aliases: []
+    ambiguous_aliases: [isar]
+    context: [flutter, dart, pubspec, database]
+  drift:
+    category: database
+    aliases: [drift_dev]
+    ambiguous_aliases: [drift]
+    context: [flutter, dart, sqlite, pubspec]
+  hive:
+    category: database
+    aliases: [hive_flutter]
+    ambiguous_aliases: [hive]
+    context: [flutter, dart, pubspec, database]
+  go-router:
+    category: mobile
+    aliases: [go_router]
+  get-it:
+    category: mobile
+    aliases: [get_it]
+  flutter-hooks:
+    category: mobile
+    aliases: [flutter_hooks]
+  flutter-testing:
+    category: mobile
+    aliases: [flutter_test, integration_test]
+  build-runner:
+    category: mobile
+    aliases: [build_runner]
+  spark:
+    category: data
+    aliases: [apache spark, pyspark]
+  kafka:
+    category: data
+    aliases: [kafka, event streaming]
+  redpanda:
+    category: data
+    aliases: [redpanda]
+  flink:
+    category: data
+    aliases: [flink, apache flink]
+  samsung:
+    category: company
+    aliases: [samsung]
+  sony:
+    category: company
+    aliases: [sony]
+  huawei:
+    category: company
+    aliases: [huawei]
+  xiaomi:
+    category: company
+    aliases: [xiaomi]
+  lenovo:
+    category: company
+    aliases: [lenovo]
+  bytedance:
+    category: company
+    aliases: [bytedance]
+  alibaba:
+    category: company
+    aliases: [alibaba]
+  tencent:
+    category: company
+    aliases: [tencent]
+  baidu:
+    category: company
+    aliases: [baidu]
+  salesforce:
+    category: company
+    aliases: [salesforce]
+  adobe:
+    category: company
+    aliases: [adobe]
+  shopify:
+    category: company
+    aliases: [shopify]
+  palantir:
+    category: company
+    aliases: [palantir]
+  twilio:
+    category: company
+    aliases: [twilio]
+  okta:
+    category: company
+    aliases: [okta]
+  crowdstrike:
+    category: company
+    aliases: [crowdstrike]
+  atlassian:
+    category: company
+    aliases: [atlassian]
+  uber:
+    category: company
+    aliases: [uber]
+  lyft:
+    category: company
+    aliases: [lyft]
+  airbnb:
+    category: company
+    aliases: [airbnb]
+  doordash:
+    category: company
+    aliases: [doordash]
+  spotify:
+    category: company
+    aliases: [spotify]
+  softbank:
+    category: company
+    aliases: [softbank]
+  sam-altman:
+    category: people
+    aliases: [sam altman]
+  elon-musk:
+    category: people
+    aliases: [elon musk]
+  mozilla:
+    category: company
+    aliases: [mozilla]
+  linux-foundation:
+    category: company
+    aliases: [linux foundation, cncf]
+  apache-foundation:
+    category: company
+    aliases: [apache software foundation]
+  jetbrains-ides:
+    category: tooling
+    aliases:
+      [
+        jetbrains,
+        intellij,
+        pycharm,
+        webstorm,
+        clion,
+        rider,
+        goland,
+        rubymine,
+        jetbrains fleet,
+      ]
+  wikipedia:
+    category: platform
+    aliases: [wikipedia, wikidata, wikimedia]
+  solana:
+    category: crypto
+    aliases: [solana]
+  cardano:
+    category: crypto
+    aliases: [cardano]
+  polkadot:
+    category: crypto
+    aliases: [polkadot]
+  dogecoin:
+    category: crypto
+    aliases: [dogecoin]
+  litecoin:
+    category: crypto
+    aliases: [litecoin]
+  monero:
+    category: crypto
+    aliases: [monero]
+  zcash:
+    category: crypto
+    aliases: [zcash]
+  xrp:
+    category: crypto
+    aliases: [xrp]
+  tsmc:
+    category: company
+    aliases: [tsmc, taiwan semiconductor]
+  asml:
+    category: company
+    aliases: [asml]
+  globalfoundries:
+    category: company
+    aliases: [global foundries, globalfoundries]
+  micron:
+    category: company
+    aliases: [micron]
+  sk-hynix:
+    category: company
+    aliases: [sk hynix, sk-hynix]
+  qualcomm:
+    category: company
+    aliases: [qualcomm, snapdragon]
+  broadcom:
+    category: company
+    aliases: [broadcom]
+  gitlab:
+    category: tooling
+    aliases: [gitlab, gitlab ci]
+  circleci:
+    category: tooling
+    aliases: [circleci]
+  bitbucket:
+    category: tooling
+    aliases: [bitbucket]
+  jira:
+    category: tooling
+    aliases: [jira]
+  confluence:
+    category: tooling
+    aliases: [confluence]
+  trello:
+    category: tooling
+    aliases: [trello]
+  playwright:
+    category: tooling
+    aliases: []
+    ambiguous_aliases: [playwright]
+    context: [test, testing, e2e, browser, end-to-end, automation]
+  cypress:
+    category: tooling
+    aliases: []
+    ambiguous_aliases: [cypress]
+    context: [test, testing, e2e, browser, end-to-end, automation]
+  puppeteer:
+    category: tooling
+    aliases: [puppeteer]
+  selenium:
+    category: tooling
+    aliases: [selenium]
+  pytest:
+    category: tooling
+    aliases: [pytest]
+  jest:
+    category: tooling
+    aliases: [jest]
+  vitest:
+    category: tooling
+    aliases: [vitest]
+  storybook:
+    category: tooling
+    aliases: [storybook]
+  ionic:
+    category: mobile
+    aliases: [ionic, ionic framework]
+  cordova:
+    category: mobile
+    aliases: [cordova, apache cordova]
+  nativescript:
+    category: mobile
+    aliases: [nativescript]
+  keras:
+    category: ai-ml
+    aliases: [keras]
+  scikit-learn:
+    category: ai-ml
+    aliases: [scikit-learn, sklearn, scikit learn]
+  gradient-boosting:
+    category: ai-ml
+    aliases: [xgboost, lightgbm, catboost]
+  airflow:
+    category: data
+    aliases: [airflow]
+  dagster:
+    category: data
+    aliases: [dagster]
+  dbt:
+    category: data
+    aliases: [dbt, data build tool]
+  hadoop:
+    category: data
+    aliases: [hadoop, hdfs, mapreduce]
+  trino:
+    category: data
+    aliases: [trino, presto]
+  ubuntu:
+    category: os
+    aliases: [ubuntu, linux mint, pop!_os]
+  debian:
+    category: os
+    aliases: [debian]
+  canonical:
+    category: company
+    aliases: []
+    ambiguous_aliases: [canonical]
+    context: [ubuntu, snap, mark shuttleworth, linux]
+  ansible:
+    category: cloud-devops
+    aliases: [ansible]
+  saltstack:
+    category: cloud-devops
+    aliases: [saltstack]
+  pulumi:
+    category: cloud-devops
+    aliases: [pulumi]
+  cloudformation:
+    category: cloud-devops
+    aliases: [cloudformation]
+  prometheus:
+    category: cloud-devops
+    aliases: [prometheus]
+  grafana:
+    category: cloud-devops
+    aliases: [grafana, grafana labs]
+  datadog:
+    category: cloud-devops
+    aliases: [datadog]
+  new-relic:
+    category: cloud-devops
+    aliases: [new relic]
+  cassandra:
+    category: database
+    aliases: [cassandra]
+  scylladb:
+    category: database
+    aliases: [scylladb]
+  dynamodb:
+    category: database
+    aliases: [dynamodb]
+  wordpress:
+    category: web-backend
+    aliases: [wordpress, woocommerce]
+  drupal:
+    category: web-backend
+    aliases: [drupal]
+  symfony:
+    category: web-backend
+    aliases: [symfony]
+  qwen:
+    category: ai-ml
+    aliases: [qwen]
+  gemma:
+    category: ai-ml
+    aliases: [gemma]
+  kimi:
+    category: ai-ml
+    aliases: [moonshot ai]
+    ambiguous_aliases: [kimi]
+    context: [moonshot, llm, model, kimi k2]
+  dotnet:
+    category: runtime
+    aliases: [dotnet, asp.net, .net core, .net]
+  notion:
+    category: platform
+    aliases: [notion.so, notion ai]
+    ambiguous_aliases: [notion]
+    context: [
+        notion page,
+        notion pages,
+        notion database,
+        notion api,
+        notion docs,
+        wiki,
+        workspace,
+        knowledge
+        base,
+      ]
+  meta:
+    category: company
+    aliases: [meta platforms, facebook, meta ai, reality labs]
+    ambiguous_aliases: [meta]
+    context: [zuckerberg, instagram, whatsapp, llama, meta quest, reality labs]
+  slack:
+    category: platform
+    aliases: [slack app]
+    ambiguous_aliases: [slack]
+    context:
+      [
+        workspace,
+        slack channel,
+        slack api,
+        slack bot,
+        slack message,
+        salesforce,
+      ]
+  zoom:
+    category: platform
+    aliases: [zoom call, zoom meeting, zoom video]
+    ambiguous_aliases: [zoom]
+    context:
+      [meeting, meetings, video call, video conferencing, webinar, zoom.us]
+  grok:
+    category: ai-ml
+    aliases: []
+    ambiguous_aliases: [grok]
+    context: [xai, x.ai, musk, llm, grok 3, grok 4]
+  cryptocurrency:
+    category: crypto
+    aliases: [
+        cryptocurrency,
+        cryptocurrencies,
+        crypto currency,
+        crypto wallet,
+        crypto exchange,
+        crypto
+        exchanges,
+        altcoin,
+        altcoins,
+        memecoin,
+        memecoins,
+        meme coin,
+        meme coins,
+        rug pull,
+      ]
+    ambiguous_aliases: [crypto]
+    context:
+      [
+        bitcoin,
+        ethereum,
+        defi,
+        nft,
+        nfts,
+        blockchain,
+        stablecoin,
+        coinbase,
+        binance,
+        web3,
+        altcoin,
+        memecoin,
+      ]
+  web-components:
+    category: web-platform
+    aliases: [web components, custom elements, shadow dom]
+    ambiguous_aliases: [lit]
+    context:
+      [web components, custom elements, lit-element, lit-html, shadow dom]
+  vector-database:
+    category: ai-ml
+    aliases:
+      [
+        vector database,
+        vector databases,
+        vector db,
+        vector search,
+        weaviate,
+        chromadb,
+        milvus,
+        faiss,
+      ]
+    ambiguous_aliases: [chroma]
+    context: [vector database, vector db, embeddings, llm, rag, vector search]
+  fiber:
+    category: networking
+    aliases: [ftth, fiber internet, fibre optic, fiber optic]
+    ambiguous_aliases: [fiber, fibre]
+    context: [isp, broadband, gigabit, ftth, internet service, optic, bandwidth]
+  video-generation:
+    category: ai-ml
+    aliases: [text-to-video, video generation]
+    ambiguous_aliases: [sora, veo]
+    context: [openai, google, gemini, video, text-to-video, video generation]
+implies:
+  llm: [ai]
+  ai-agents: [ai]
+  ai-safety: [ai]
+  generative-ai: [ai]
+  claude-code: [ai]
+  github-copilot: [ai]
+  chatgpt: [openai]
+  gcp: [google]
+versioned: [python, vue, react, angular, svelte, nextjs]
+case_sensitive:
+  go: [go]
+  ev: [ev, evs]
+  vr-ar: [vr, xr]
+  ada: [ada]
+  arm-architecture: [arm]
+  machine-learning: [ml]
+  qt: [qt]
+  apple-silicon: [m1, m2, m3, m4, m5]
+  meta: [meta]
+  slack: [slack]
+  zoom: [zoom]
+  grok: [grok]
