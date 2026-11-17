@@ -30,6 +30,8 @@ class Settings(BaseSettings):
     OPENAI_MAX_HISTORY_MESSAGES: int = 100
     OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
     OPENAI_EMBEDDING_DIMENSIONS: int = 1536
+    OPENAI_SUMMARY_MODEL: str = "gpt-4o-mini"
+    OPENAI_SUMMARY_MAX_COMPLETION_TOKENS: int = 600
 
     # Server configuration
     ALLOWED_ORIGINS: str = "http://localhost:5173"

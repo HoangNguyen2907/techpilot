@@ -6,6 +6,7 @@ from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     BigInteger,
     Boolean,
+    CheckConstraint,
     Column,
     Computed,
     Date,
@@ -18,6 +19,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     func,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -116,11 +118,19 @@ class HNTotalsMonthly(Base):
     """Total Hacker News stories, points, and comments per month for normalization."""
 
     __tablename__ = "hn_totals_monthly"
+    __table_args__ = (
+        CheckConstraint(
+            "source IN ('bigquery', 'corpus')", name="ck_hn_totals_monthly_source"
+        ),
+    )
 
     month: Mapped[date] = mapped_column(Date, primary_key=True)
     total_stories: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     total_points: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     total_comments: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    source: Mapped[str] = mapped_column(
+        String(20), default="bigquery", server_default="bigquery", nullable=False
+    )
 
 
 class HNChunk(Base):
@@ -130,6 +140,14 @@ class HNChunk(Base):
     __table_args__ = (
         Index(
             "ix_hn_chunks_search_vector_gin", "search_vector", postgresql_using="gin"
+        ),
+        Index("ix_hn_chunks_embedding_version", "embedding_version"),
+        Index("ix_hn_chunks_embedding_attempts", "embedding_attempts"),
+        Index(
+            "ix_hn_chunks_pending_created_id",
+            "created_at",
+            "id",
+            postgresql_where=text("embedding IS NULL"),
         ),
     )
 
@@ -153,6 +171,12 @@ class HNChunk(Base):
     )  # title, summary, comment
     content: Mapped[str] = mapped_column(Text, nullable=False)
     embedding = Column(Vector(1536), nullable=True)
+    embedding_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    content_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    embedding_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    embedding_attempts: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0", nullable=False
+    )
     search_vector = Column(
         TSVECTOR,
         Computed("to_tsvector('english', content)", persisted=True),
