@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import logging
+from collections.abc import Callable
 from pathlib import Path
 
 from openai import AsyncOpenAI
@@ -9,9 +10,42 @@ from app.config import settings
 from app.database.session import create_database_engine, create_session_factory
 from app.ingest.chunk_and_embed import chunk_stories, embed_pending
 from app.ingest.load_raw import DEFAULT_INPUT, load_raw
-from app.ingest.tag_stories import create_tagger, tag_stories
+from app.ingest.tag_stories import (
+    create_tagger,
+    refresh_trend_view,
+    sync_monthly_totals,
+    tag_stories,
+)
 
 logger = logging.getLogger("techpilot.ingest")
+DAILY_PIPELINE_ADVISORY_LOCK_KEY = 741_203_119
+
+
+def run_daily_pipeline(
+    engine, crawl: Callable[[], object], limit: int | None = None
+) -> int:
+    """Run crawl, tagging, and aggregate refresh under a nonblocking database lock."""
+    with engine.connect() as lock_connection:
+        acquired = lock_connection.exec_driver_sql(
+            "SELECT pg_try_advisory_lock(%s)", (DAILY_PIPELINE_ADVISORY_LOCK_KEY,)
+        ).scalar_one()
+        if not acquired:
+            logger.warning(
+                "Daily HN pipeline skipped: another run holds the advisory lock"
+            )
+            return 0
+        try:
+            crawl()
+            tagged = tag_stories(engine, limit=limit, refresh_view=False)
+            if limit is None:
+                sessions = create_session_factory(engine)
+                sync_monthly_totals(sessions)
+                refresh_trend_view(engine)
+            return tagged
+        finally:
+            lock_connection.exec_driver_sql(
+                "SELECT pg_advisory_unlock(%s)", (DAILY_PIPELINE_ADVISORY_LOCK_KEY,)
+            )
 
 
 def build_parser() -> argparse.ArgumentParser:

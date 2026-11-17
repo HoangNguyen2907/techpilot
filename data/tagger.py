@@ -33,6 +33,7 @@ import html
 import re
 import sys
 import time
+import unicodedata
 from bisect import bisect_right
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -48,17 +49,25 @@ _URL_RE = re.compile(r"(?:https?://|www\.)\S+", re.IGNORECASE)
 _URL_SPLIT_RE = re.compile(r"[/._\-?=&+]+")
 
 
-def clean_text(text: str | None, strip_urls: bool = True) -> str:
-    """Algolia returns HTML ('<p>', '<a href=...>', '&#x27;'). Turn it into plain text and
-    drop URLs so 'github.com/...' does not tag github on every link."""
+_CODE_RE = re.compile(r"<pre[^>]*>.*?</pre>|<code[^>]*>.*?</code>", re.I | re.S)
+_ZW_RE = re.compile(r"[\u200b-\u200d\u2060\ufeff\u00ad]")
+_PATH_URL_RE = re.compile(r"\b[\w-]+(?:\.[\w-]+)*\.(?:com|org|io|dev)/\S*", re.I)
+
+
+def clean_text(text, strip_urls=True, is_html=True):
     if not text:
         return ""
-    if "<" in text:
-        text = _HTML_TAG_RE.sub(" ", text)  # removes href attributes with the tag
-    if "&" in text:
+    if is_html:
+        text = _CODE_RE.sub(" ", text)
+        text = re.sub(r"<p>", "\n", text, flags=re.I)
+        text = _HTML_TAG_RE.sub(" ", text)
         text = html.unescape(text)
+        text = re.sub(r"(?m)^\s*>.*$", " ", text)
+    text = unicodedata.normalize("NFKC", text)
+    text = _ZW_RE.sub("", text)
     if strip_urls:
         text = _URL_RE.sub(" ", text)
+        text = _PATH_URL_RE.sub(" ", text)
     return text
 
 

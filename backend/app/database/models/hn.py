@@ -34,6 +34,13 @@ class HNStory(Base):
     """Cleaned Hacker News story."""
 
     __tablename__ = "hn_stories"
+    __table_args__ = (
+        Index(
+            "ix_hn_stories_untagged",
+            "id",
+            postgresql_where=text("tagged_dict_version IS NULL"),
+        ),
+    )
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)  # HN story ID
     title: Mapped[str] = mapped_column(Text, nullable=False)
@@ -48,6 +55,7 @@ class HNStory(Base):
     kind: Mapped[str] = mapped_column(
         String(32), default="story", nullable=False
     )  # story, ask_hn, show_hn
+    tagged_dict_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
     comments: Mapped[list["HNComment"]] = relationship(
         "HNComment", back_populates="story", cascade="all, delete-orphan"

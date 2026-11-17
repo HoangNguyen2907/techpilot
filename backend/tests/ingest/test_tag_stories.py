@@ -1,5 +1,4 @@
 from datetime import UTC, datetime
-from types import SimpleNamespace
 from typing import Self
 
 import pytest
@@ -7,27 +6,25 @@ from sqlalchemy import Date, cast, func, select
 from sqlalchemy.dialects import postgresql
 
 from app.database.models import HNStory, HNTotalsMonthly
-from app.ingest.tag_stories import _via_for_story, sync_monthly_totals
+from app.ingest.tag_stories import Tagger, story_tag_rows, sync_monthly_totals
 
 
 @pytest.mark.parametrize(
-    ("title", "body", "expected"),
-    [
-        ({"react": "alias"}, {}, "direct"),
-        ({}, {"go": "context"}, "ambiguous"),
-        ({}, {"vue": "implied"}, "implied"),
-        ({"go": "context"}, {"go": "alias"}, "direct"),
-        ({}, {}, None),
-    ],
+    ("title", "body", "expected_via"),
+    [("ReactJS app", "", "direct"), ("Go module", "", "ambiguous")],
 )
-def test_via_for_story(
-    title: dict[str, str], body: dict[str, str], expected: str | None
-):
-    title_matches = {tech: SimpleNamespace(via=via) for tech, via in title.items()}
-    body_matches = {tech: SimpleNamespace(via=via) for tech, via in body.items()}
-    tech = next(iter(title.keys() | body.keys()), "unmatched")
+def test_story_tag_rows_returns_taggers_match_provenance(
+    title: str, body: str, expected_via: str
+) -> None:
+    from pathlib import Path
 
-    assert _via_for_story(tech, title_matches, body_matches) == expected
+    tagger = Tagger(Path(__file__).resolve().parents[3] / "data" / "tech_dict.yaml")
+    story = HNStory(id=1, title=title, text=body, url=None)
+
+    rows = story_tag_rows(tagger, story)
+
+    assert rows
+    assert rows[0]["via"] == expected_via
 
 
 def test_month_expression_uses_utc_for_timestamptz_boundaries() -> None:

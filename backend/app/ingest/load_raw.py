@@ -7,6 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from sqlalchemy import case, or_
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -171,9 +172,19 @@ def story_row(item: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, Any]
 
 def upsert_story(session: Session, row: dict[str, Any]) -> None:
     statement = insert(HNStory).values(row)
+    content_changed = or_(
+        HNStory.title.is_distinct_from(statement.excluded.title),
+        HNStory.text.is_distinct_from(statement.excluded.text),
+        HNStory.url.is_distinct_from(statement.excluded.url),
+    )
     statement = statement.on_conflict_do_update(
         index_elements=[HNStory.id],
-        set_={key: getattr(statement.excluded, key) for key in row if key != "id"},
+        set_={
+            **{key: getattr(statement.excluded, key) for key in row if key != "id"},
+            "tagged_dict_version": case(
+                (content_changed, None), else_=HNStory.tagged_dict_version
+            ),
+        },
     )
     session.execute(statement)
 

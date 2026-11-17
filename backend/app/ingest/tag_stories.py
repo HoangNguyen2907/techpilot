@@ -26,43 +26,16 @@ def create_tagger(dictionary: Path | None = None) -> Tagger:
     return Tagger(path, strict=True)
 
 
-def _via_for_story(
-    tech: str,
-    title_matches: dict[str, Any],
-    body_matches: dict[str, Any],
-) -> str | None:
-    matches: list[str] = []
-    for source in (title_matches, body_matches):
-        match = source.get(tech)
-        if match is not None:
-            matches.append(match.via)
-    if "alias" in matches:
-        return "direct"
-    # Tagger's `context` means a context-dependent alias was confirmed. The
-    # persisted story_tech vocabulary calls this `ambiguous`.
-    if "context" in matches:
-        return "ambiguous"
-    if "implied" in matches:
-        return "implied"
-    return None
-
-
 def story_tag_rows(tagger: Tagger, story: HNStory) -> list[dict[str, Any]]:
     title = story.title or ""
     body = story.text or ""
     url = story.url or ""
-    found = tagger.tag_story(title, body, url)
-    title_matches = tagger.tag(
-        title,
-        context_text=f"{url}\n{body[:300]}",
-    )
-    body_matches = tagger.tag(
-        body,
-        context_text=f"{title}\n{url}",
-    )
+    found = tagger.tag_story(title, body, url, include_via=True)
     rows: list[dict[str, Any]] = []
     for tech, result in sorted(found.items()):
-        via = _via_for_story(tech, title_matches, body_matches)
+        via = {"alias": "direct", "context": "ambiguous", "implied": "implied"}.get(
+            result["via"]
+        )
         if via is None:
             logger.warning(
                 "Could not determine match provenance for story=%s tech=%s; "
@@ -100,13 +73,16 @@ def sync_monthly_totals(sessions: sessionmaker[Session]) -> int:
                     literal("corpus", type_=HNTotalsMonthly.source.type).label(
                         "source"
                     ),
-                ).group_by(month)
+                )
+                .where(HNStory.created_at.is_not(None))
+                .group_by(month)
             )
             .mappings()
             .all()
         )
 
     if not totals:
+        logger.info("Monthly totals synchronized: rows=0")
         return 0
     rows = [dict(row) for row in totals]
     statement = insert(HNTotalsMonthly).values(rows)
@@ -122,11 +98,19 @@ def sync_monthly_totals(sessions: sessionmaker[Session]) -> int:
     )
     with sessions.begin() as session:
         result = session.execute(statement)
+    logger.info("Monthly totals synchronized: rows=%d", result.rowcount or 0)
     return result.rowcount or 0
 
 
 def refresh_trend_view(engine: Engine) -> None:
     with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as connection:
+        populated = connection.exec_driver_sql(
+            "SELECT ispopulated FROM pg_matviews WHERE schemaname = current_schema() "
+            "AND matviewname = 'trend_monthly'"
+        ).scalar_one_or_none()
+        if populated is False:
+            connection.exec_driver_sql("REFRESH MATERIALIZED VIEW trend_monthly")
+            return
         index_definition = connection.exec_driver_sql(
             """
             SELECT indexdef
@@ -165,7 +149,11 @@ def tag_stories(
             stories = list(
                 session.scalars(
                     select(HNStory)
-                    .where(HNStory.id > last_id)
+                    .where(
+                        HNStory.id > last_id,
+                        (HNStory.tagged_dict_version.is_(None))
+                        | (HNStory.tagged_dict_version != active_tagger.dict_version),
+                    )
                     .order_by(HNStory.id)
                     .limit(batch_limit)
                 )
@@ -180,7 +168,7 @@ def tag_stories(
         with sessions.begin() as session:
             session.execute(delete(StoryTech).where(StoryTech.story_id.in_(story_ids)))
             if tag_rows:
-                statement = insert(StoryTech).values(tag_rows)
+                statement = insert(StoryTech)
                 statement = statement.on_conflict_do_update(
                     index_elements=[StoryTech.story_id, StoryTech.tech],
                     set_={
@@ -189,13 +177,24 @@ def tag_stories(
                         "via": statement.excluded.via,
                     },
                 )
-                session.execute(statement)
+                session.execute(statement, tag_rows)
+            session.execute(
+                HNStory.__table__.update()
+                .where(HNStory.id.in_(story_ids))
+                .values(tagged_dict_version=active_tagger.dict_version)
+            )
         processed += len(stories)
         last_id = stories[-1].id
-        logger.info("Tagged %d stories", processed)
+        logger.info(
+            "Tagged batch: stories=%d last_id=%d dict_version=%s",
+            len(stories),
+            last_id,
+            active_tagger.dict_version,
+        )
 
     should_refresh = limit is None if refresh_view is None else refresh_view
-    sync_monthly_totals(sessions)
+    if limit is None and refresh_view is not False:
+        sync_monthly_totals(sessions)
     if should_refresh:
         refresh_trend_view(engine)
     logger.info(
