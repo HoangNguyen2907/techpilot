@@ -1,6 +1,6 @@
+import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
-import uuid
 
 from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -58,7 +58,9 @@ class ChatMessage(Base):
         nullable=False,
         index=True,
     )
-    role: Mapped[str] = mapped_column(String(32), nullable=False)  # user, assistant, system
+    role: Mapped[str] = mapped_column(
+        String(32), nullable=False
+    )  # user, assistant, system
     content: Mapped[str] = mapped_column(Text, nullable=False)
     parts: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
@@ -100,5 +102,9 @@ class MessageCitation(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
-    message: Mapped["ChatMessage"] = relationship("ChatMessage", back_populates="citations")
-    chunk: Mapped["HNChunk | None"] = relationship("HNChunk", back_populates="citations")
+    message: Mapped["ChatMessage"] = relationship(
+        "ChatMessage", back_populates="citations"
+    )
+    chunk: Mapped["HNChunk | None"] = relationship(
+        "HNChunk", back_populates="citations"
+    )

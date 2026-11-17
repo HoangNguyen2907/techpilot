@@ -23,7 +23,11 @@ class Settings(BaseSettings):
     DATABASE_PASSWORD: str | None = None
 
     # OpenAI configuration
-    OPENAI_API_KEY: str = "sk-placeholder"
+    OPENAI_API_KEY: str
+    OPENAI_CHAT_MODEL: str = "gpt-6-luna"
+    OPENAI_CONTEXT_WINDOW_TOKENS: int = 32_768
+    OPENAI_MAX_COMPLETION_TOKENS: int = 2_048
+    OPENAI_MAX_HISTORY_MESSAGES: int = 100
     OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
     OPENAI_EMBEDDING_DIMENSIONS: int = 1536
 

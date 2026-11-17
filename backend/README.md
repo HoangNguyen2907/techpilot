@@ -21,3 +21,18 @@ uv run uvicorn app.main:app --reload
 ```
 
 The API is available at `http://localhost:8000`. Health check: `GET /health`. Interactive API docs: `/docs`.
+
+## SSE reverse proxy
+
+The API sends `X-Accel-Buffering: no` and 15-second comment heartbeats. If NGINX proxies the chat route, disable buffering and allow an idle interval longer than the heartbeat:
+
+```nginx
+location = /api/chat/stream {
+    proxy_pass http://techpilot_backend;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_buffering off;
+    proxy_cache off;
+    proxy_read_timeout 60s;
+}
+```
